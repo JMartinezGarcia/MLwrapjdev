@@ -113,7 +113,7 @@ BinaryClassificationOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6
             show_sobol = TRUE, ...) {
 
             super$initialize(
-                package="MLwrapj",
+                package="MLwrapjdev",
                 name="BinaryClassification",
                 requiresData=TRUE,
                 ...)
@@ -1733,7 +1733,7 @@ BinaryClassificationBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R
     public = list(
         initialize = function(options, data=NULL, datasetId="", analysisId="", revision=0) {
             super$initialize(
-                package = "MLwrapj",
+                package = "MLwrapjdev",
                 name = "BinaryClassification",
                 version = c(1,0,0),
                 options = options,

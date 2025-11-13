@@ -105,7 +105,7 @@ RegressionOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             show_sobol = TRUE, ...) {
 
             super$initialize(
-                package="MLwrapj",
+                package="MLwrapjdev",
                 name="Regression",
                 requiresData=TRUE,
                 ...)
@@ -1767,7 +1767,7 @@ RegressionBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     public = list(
         initialize = function(options, data=NULL, datasetId="", analysisId="", revision=0) {
             super$initialize(
-                package = "MLwrapj",
+                package = "MLwrapjdev",
                 name = "Regression",
                 version = c(1,0,0),
                 options = options,

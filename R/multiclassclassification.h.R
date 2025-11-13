@@ -111,7 +111,7 @@ MulticlassClassificationOptions <- if (requireNamespace("jmvcore", quietly=TRUE)
             show_olden = TRUE, ...) {
 
             super$initialize(
-                package="MLwrapj",
+                package="MLwrapjdev",
                 name="MulticlassClassification",
                 requiresData=TRUE,
                 ...)
@@ -2289,7 +2289,7 @@ MulticlassClassificationBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R
     public = list(
         initialize = function(options, data=NULL, datasetId="", analysisId="", revision=0) {
             super$initialize(
-                package = "MLwrapj",
+                package = "MLwrapjdev",
                 name = "MulticlassClassification",
                 version = c(1,0,0),
                 options = options,

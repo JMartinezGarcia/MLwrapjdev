@@ -1,6 +1,6 @@
 ---
 title: 'MLwrapj: Machine Learning Modelling'
-name: MLwrapj
+name: MLwrapjdev
 version: 0.0.0
 jms: '1.0'
 authors:
@@ -16,8 +16,8 @@ description: >-
 analyses:
   - title: Regression
     name: Regression
-    ns: MLwrapj
-    menuGroup: EasyML
+    ns: MLwrapjdev
+    menuGroup: MLwrapjdev
     menuSubgroup: Regression
     menuTitle: Regression
     description: >
@@ -28,8 +28,8 @@ analyses:
     category: analyses
   - title: Binary Classification
     name: BinaryClassification
-    ns: MLwrapj
-    menuGroup: EasyML
+    ns: MLwrapjdev
+    menuGroup: MLwrapjdev
     menuSubgroup: Classification
     menuTitle: Binary Classification
     description: >
@@ -40,8 +40,8 @@ analyses:
     category: analyses
   - title: Multiclass Classification
     name: MulticlassClassification
-    ns: MLwrapj
-    menuGroup: EasyML
+    ns: MLwrapjdev
+    menuGroup: MLwrapjdev
     menuSubgroup: Classification
     menuTitle: Multiclass Classification
     description: >
