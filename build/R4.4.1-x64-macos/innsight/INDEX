@@ -1,0 +1,36 @@
++,innsight_ggplot2,ANY-method
+                        Generic add function for 'innsight_ggplot2'
+AgnosticWrapper         Super class for model-agnostic interpretability
+                        methods
+ConnectionWeights       Connection weights method
+ConvertedModel          Converted torch-based model
+Converter               Converter of an artificial neural network
+DeepLift                Deep learning important features (DeepLift)
+DeepSHAP                Deep Shapley additive explanations (DeepSHAP)
+ExpectedGradient        Expected Gradients
+Gradient                Vanilla Gradient and Gradient\timesInput
+GradientBased           Super class for gradient-based interpretation
+                        methods
+IntegratedGradient      Integrated Gradients
+InterpretingMethod      Super class for interpreting methods
+LIME                    Local interpretable model-agnostic explanations
+                        (LIME)
+LRP                     Layer-wise relevance propagation (LRP)
+SHAP                    Shapley values
+SmoothGrad              SmoothGrad and SmoothGrad\timesInput
+[,innsight_ggplot2,ANY,ANY,ANY-method
+                        Indexing plots of 'innsight_ggplot2'
+[,innsight_plotly,ANY,ANY,ANY-method
+                        Indexing plots of 'innsight_plotly'
+get_result              Get the result of an interpretation method
+innsight-package        Get the insight of your neural network
+innsight_ggplot2        S4 class for ggplot2-based plots
+innsight_plotly         S4 class for plotly-based plots
+innsight_sugar          Syntactic sugar for object construction
+plot_global             Get the result of an interpretation method
+print,innsight_ggplot2-method
+                        Generic print, plot and show for
+                        'innsight_ggplot2'
+print,innsight_plotly-method
+                        Generic print, plot and show for
+                        'innsight_plotly'

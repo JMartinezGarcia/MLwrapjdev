@@ -1,0 +1,25 @@
+refs:
+   MLwrapj:
+       type: 'software'
+       author: Martínez-García, J., Montaño, J. J., & Sesé, A.
+       year: 2025
+       title: "MLwrapj: Machine Learning for Everyone"
+       publisher: '(Version 0.0.0) [jamovi module]. URL https://github.com/JMartinezGarcia/MLwrapj'
+       url: https://github.com/JMartinezGarcia/EasyML
+
+   MLwrap:
+        type: 'software'
+        author: Martínez-García, J., Montaño, J. J., & Sesé, A.
+        year: 2025
+        title: "MLwrap: Machine Learning Modelling for Everyone"
+        publisher: '(Version 0.2.2) [R package]. URL https://CRAN.R-project.org/package=MLwrap'
+        url: https://CRAN.R-project.org/package=MLwrap
+
+   MLwrap_tutorial:
+        type: 'article'
+        author: Jiménez, R., Martínez-García, J., Montaño, J. J., & Sesé, A.
+        year: 2025
+        title: "MLwrap: Simplifying Machine Learning workflows in R"
+        publisher: "Psyarxiv"
+        doi: doi:10.31234/osf.io/j6m4z_v1
+        url: https://doi.org/10.31234/osf.io/j6m4z_v1

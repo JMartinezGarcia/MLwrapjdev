@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head><title>R: Get the Insights of Your Neural Network</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body><div class="container">
+<h1> Get the Insights of Your Neural Network
+<img class="toplogo" src="../../../doc/html/Rlogo.svg" alt="[R logo]" />
+</h1>
+<hr/>
+<div style="text-align: center;">
+<a href="../../../doc/html/packages.html"><img class="arrow" src="../../../doc/html/left.jpg" alt="[Up]" /></a>
+<a href="../../../doc/html/index.html"><img class="arrow" src="../../../doc/html/up.jpg" alt="[Top]" /></a>
+</div><h2>Documentation for package &lsquo;innsight&rsquo; version 0.3.0</h2>
+
+<ul><li><a href="../DESCRIPTION">DESCRIPTION file</a>.</li>
+<li><a href="../doc/index.html">User guides, package vignettes and other documentation.</a></li>
+<li><a href="../NEWS">Package NEWS</a>.</li>
+</ul>
+
+<h2>Help Pages</h2>
+
+
+<table style="width: 100%;">
+<tr><td style="width: 25%;"><a href="innsight-package.html">innsight-package</a></td>
+<td>Get the insight of your neural network</td></tr>
+<tr><td style="width: 25%;"><a href="innsight_ggplot2-plus.html">+-method</a></td>
+<td>Generic add function for 'innsight_ggplot2'</td></tr>
+<tr><td style="width: 25%;"><a href="innsight_ggplot2-plus.html">+.innsight_ggplot2</a></td>
+<td>Generic add function for 'innsight_ggplot2'</td></tr>
+<tr><td style="width: 25%;"><a href="AgnosticWrapper.html">AgnosticWrapper</a></td>
+<td>Super class for model-agnostic interpretability methods</td></tr>
+<tr><td style="width: 25%;"><a href="ConnectionWeights.html">ConnectionWeights</a></td>
+<td>Connection weights method</td></tr>
+<tr><td style="width: 25%;"><a href="innsight_sugar.html">convert</a></td>
+<td>Syntactic sugar for object construction</td></tr>
+<tr><td style="width: 25%;"><a href="ConvertedModel.html">ConvertedModel</a></td>
+<td>Converted torch-based model</td></tr>
+<tr><td style="width: 25%;"><a href="Converter.html">Converter</a></td>
+<td>Converter of an artificial neural network</td></tr>
+<tr><td style="width: 25%;"><a href="DeepLift.html">DeepLift</a></td>
+<td>Deep learning important features (DeepLift)</td></tr>
+<tr><td style="width: 25%;"><a href="DeepSHAP.html">DeepSHAP</a></td>
+<td>Deep Shapley additive explanations (DeepSHAP)</td></tr>
+<tr><td style="width: 25%;"><a href="ExpectedGradient.html">ExpectedGradient</a></td>
+<td>Expected Gradients</td></tr>
+<tr><td style="width: 25%;"><a href="get_result.html">get_result</a></td>
+<td>Get the result of an interpretation method</td></tr>
+<tr><td style="width: 25%;"><a href="Gradient.html">Gradient</a></td>
+<td>Vanilla Gradient and Gradient\timesInput</td></tr>
+<tr><td style="width: 25%;"><a href="GradientBased.html">GradientBased</a></td>
+<td>Super class for gradient-based interpretation methods</td></tr>
+<tr><td style="width: 25%;"><a href="innsight-package.html">innsight</a></td>
+<td>Get the insight of your neural network</td></tr>
+<tr><td style="width: 25%;"><a href="innsight_ggplot2-class.html">innsight_ggplot2</a></td>
+<td>S4 class for ggplot2-based plots</td></tr>
+<tr><td style="width: 25%;"><a href="innsight_plotly-class.html">innsight_plotly</a></td>
+<td>S4 class for plotly-based plots</td></tr>
+<tr><td style="width: 25%;"><a href="innsight_sugar.html">innsight_sugar</a></td>
+<td>Syntactic sugar for object construction</td></tr>
+<tr><td style="width: 25%;"><a href="IntegratedGradient.html">IntegratedGradient</a></td>
+<td>Integrated Gradients</td></tr>
+<tr><td style="width: 25%;"><a href="InterpretingMethod.html">InterpretingMethod</a></td>
+<td>Super class for interpreting methods</td></tr>
+<tr><td style="width: 25%;"><a href="LIME.html">LIME</a></td>
+<td>Local interpretable model-agnostic explanations (LIME)</td></tr>
+<tr><td style="width: 25%;"><a href="LRP.html">LRP</a></td>
+<td>Layer-wise relevance propagation (LRP)</td></tr>
+<tr><td style="width: 25%;"><a href="innsight_ggplot2-print.html">plot-method</a></td>
+<td>Generic print, plot and show for 'innsight_ggplot2'</td></tr>
+<tr><td style="width: 25%;"><a href="innsight_plotly-print.html">plot-method</a></td>
+<td>Generic print, plot and show for 'innsight_plotly'</td></tr>
+<tr><td style="width: 25%;"><a href="innsight_ggplot2-print.html">plot.innsight_ggplot2</a></td>
+<td>Generic print, plot and show for 'innsight_ggplot2'</td></tr>
+<tr><td style="width: 25%;"><a href="innsight_plotly-print.html">plot.innsight_plotly</a></td>
+<td>Generic print, plot and show for 'innsight_plotly'</td></tr>
+<tr><td style="width: 25%;"><a href="plot_global.html">plot_global</a></td>
+<td>Get the result of an interpretation method</td></tr>
+<tr><td style="width: 25%;"><a href="innsight_ggplot2-print.html">print-method</a></td>
+<td>Generic print, plot and show for 'innsight_ggplot2'</td></tr>
+<tr><td style="width: 25%;"><a href="innsight_plotly-print.html">print-method</a></td>
+<td>Generic print, plot and show for 'innsight_plotly'</td></tr>
+<tr><td style="width: 25%;"><a href="innsight_ggplot2-print.html">print.innsight_ggplot2</a></td>
+<td>Generic print, plot and show for 'innsight_ggplot2'</td></tr>
+<tr><td style="width: 25%;"><a href="innsight_plotly-print.html">print.innsight_plotly</a></td>
+<td>Generic print, plot and show for 'innsight_plotly'</td></tr>
+<tr><td style="width: 25%;"><a href="innsight_sugar.html">run_cw</a></td>
+<td>Syntactic sugar for object construction</td></tr>
+<tr><td style="width: 25%;"><a href="innsight_sugar.html">run_deeplift</a></td>
+<td>Syntactic sugar for object construction</td></tr>
+<tr><td style="width: 25%;"><a href="innsight_sugar.html">run_deepshap</a></td>
+<td>Syntactic sugar for object construction</td></tr>
+<tr><td style="width: 25%;"><a href="innsight_sugar.html">run_expgrad</a></td>
+<td>Syntactic sugar for object construction</td></tr>
+<tr><td style="width: 25%;"><a href="innsight_sugar.html">run_grad</a></td>
+<td>Syntactic sugar for object construction</td></tr>
+<tr><td style="width: 25%;"><a href="innsight_sugar.html">run_intgrad</a></td>
+<td>Syntactic sugar for object construction</td></tr>
+<tr><td style="width: 25%;"><a href="innsight_sugar.html">run_lime</a></td>
+<td>Syntactic sugar for object construction</td></tr>
+<tr><td style="width: 25%;"><a href="innsight_sugar.html">run_lrp</a></td>
+<td>Syntactic sugar for object construction</td></tr>
+<tr><td style="width: 25%;"><a href="innsight_sugar.html">run_shap</a></td>
+<td>Syntactic sugar for object construction</td></tr>
+<tr><td style="width: 25%;"><a href="innsight_sugar.html">run_smoothgrad</a></td>
+<td>Syntactic sugar for object construction</td></tr>
+<tr><td style="width: 25%;"><a href="SHAP.html">SHAP</a></td>
+<td>Shapley values</td></tr>
+<tr><td style="width: 25%;"><a href="innsight_ggplot2-print.html">show-method</a></td>
+<td>Generic print, plot and show for 'innsight_ggplot2'</td></tr>
+<tr><td style="width: 25%;"><a href="innsight_plotly-print.html">show-method</a></td>
+<td>Generic print, plot and show for 'innsight_plotly'</td></tr>
+<tr><td style="width: 25%;"><a href="innsight_ggplot2-print.html">show.innsight_ggplot2</a></td>
+<td>Generic print, plot and show for 'innsight_ggplot2'</td></tr>
+<tr><td style="width: 25%;"><a href="innsight_plotly-print.html">show.innsight_plotly</a></td>
+<td>Generic print, plot and show for 'innsight_plotly'</td></tr>
+<tr><td style="width: 25%;"><a href="SmoothGrad.html">SmoothGrad</a></td>
+<td>SmoothGrad and SmoothGrad\timesInput</td></tr>
+<tr><td style="width: 25%;"><a href="innsight_ggplot2-indexing.html">[-method</a></td>
+<td>Indexing plots of 'innsight_ggplot2'</td></tr>
+<tr><td style="width: 25%;"><a href="innsight_plotly-indexing.html">[-method</a></td>
+<td>Indexing plots of 'innsight_plotly'</td></tr>
+<tr><td style="width: 25%;"><a href="innsight_ggplot2-indexing.html">[.innsight_ggplot2</a></td>
+<td>Indexing plots of 'innsight_ggplot2'</td></tr>
+<tr><td style="width: 25%;"><a href="innsight_plotly-indexing.html">[.innsight_plotly</a></td>
+<td>Indexing plots of 'innsight_plotly'</td></tr>
+<tr><td style="width: 25%;"><a href="innsight_ggplot2-indexing.html">[&lt;--method</a></td>
+<td>Indexing plots of 'innsight_ggplot2'</td></tr>
+<tr><td style="width: 25%;"><a href="innsight_ggplot2-indexing.html">[&lt;-.innsight_ggplot2</a></td>
+<td>Indexing plots of 'innsight_ggplot2'</td></tr>
+<tr><td style="width: 25%;"><a href="innsight_ggplot2-indexing.html">[[-method</a></td>
+<td>Indexing plots of 'innsight_ggplot2'</td></tr>
+<tr><td style="width: 25%;"><a href="innsight_plotly-indexing.html">[[-method</a></td>
+<td>Indexing plots of 'innsight_plotly'</td></tr>
+<tr><td style="width: 25%;"><a href="innsight_ggplot2-indexing.html">[[.innsight_ggplot2</a></td>
+<td>Indexing plots of 'innsight_ggplot2'</td></tr>
+<tr><td style="width: 25%;"><a href="innsight_plotly-indexing.html">[[.innsight_plotly</a></td>
+<td>Indexing plots of 'innsight_plotly'</td></tr>
+<tr><td style="width: 25%;"><a href="innsight_ggplot2-indexing.html">[[&lt;--method</a></td>
+<td>Indexing plots of 'innsight_ggplot2'</td></tr>
+<tr><td style="width: 25%;"><a href="innsight_ggplot2-indexing.html">[[&lt;-.innsight_ggplot2</a></td>
+<td>Indexing plots of 'innsight_ggplot2'</td></tr>
+</table>
+</div></body></html>

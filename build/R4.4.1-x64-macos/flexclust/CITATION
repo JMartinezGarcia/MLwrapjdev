@@ -1,0 +1,52 @@
+bibentry(bibtype = "Article",
+         author = "Friedrich Leisch",
+         title = "A Toolbox for K-Centroids Cluster Analysis",
+         journal = "Computational Statistics and Data Analysis",
+         year = 2006,
+         volume = 51,
+         number = 2,
+         pages = "526--544",
+         doi = "10.1016/j.csda.2005.10.006",
+         header = "To cite package flexclust in publications use:")
+
+bibentry(bibtype = "Article",
+	 author = "Friedrich Leisch",
+         title = "Neighborhood Graphs, Stripes and Shadow Plots for Cluster Visualization",
+         journal = "Statistics and Computing",
+         year = 2010,
+	 volume = 20,
+	 issue = 4,
+	 pages = "457--469",
+         doi = "10.1007/s11222-009-9137-8",
+         header = "Visualization methods are explained in:")       
+        
+bibentry(bibtype = "InProceedings",
+         author = "Friedrich Leisch and Bettina Grün",
+         title = "Extending Standard Cluster Algorithms to Allow for Group Constraints",
+         booktitle = "Compstat 2006---Proceedings in Computational Statistics",
+         pages = "885--892",
+         editor = "Alfredo Rizzi and Maurizio Vichi",
+         publisher = "Physica Verlag, Heidelberg, Germany",
+         isbn = "3-7908-1708-2",
+         year = 2006,
+         header = "Group constraints are explained in:")
+         
+bibentry(bibtype = "InProceedings",
+         author = "Theresa Scharl and Friedrich Leisch",
+         title	= "The Stochastic QT--clust Algorithm: Evaluation of Stability and Variance on Time--course Microarray Data",
+         booktitle = "Compstat 2006---Proceedings in Computational Statistics",
+         pages = "1015--1022",
+         editor = "Alfredo Rizzi and Maurizio Vichi",
+         publisher = "Physica Verlag, Heidelberg, Germany",
+         isbn = "3-7908-1708-2",
+         year = 2006,
+         header = "Function qtclust() is explained in:")
+
+bibentry(bibtype = "Book",
+         author = "Sara Dolnicar and Bettina Grün and Friedrich Leisch",
+         title	= "Market Segmentation Analysis---Understanding It, Doing It, and Making It Useful",
+         publisher = "Springer",
+         year = 2018,
+         address  = "Singapore",
+         doi = "10.1007/978-981-10-8818-6",
+         header = "Using flexclust for market segmentation is explained in:")
