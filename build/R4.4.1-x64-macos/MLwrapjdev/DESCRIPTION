@@ -29,6 +29,6 @@ Imports: jmvcore (>= 0.8), remotes, patchwork, R6, tidyr, tidyselect,
         yardstick, glue, ggpubr, DiagrammeR, ggbeeswarm, ggplot2,
         stringr, dplyr, rlang, tibble, tidyverse, brulee, ranger,
         kernlab, xgboost, fastshap, innsight, sensitivity, torch, nnet
-Remotes: AlbertSesePsy/MLwrap
+Remotes: JMartinezGarcia/MLwrap
 RoxygenNote: 7.3.2
-Built: R 4.4.1; ; 2025-11-13 12:38:05 UTC; unix
+Built: R 4.4.1; ; 2025-12-04 12:25:10 UTC; unix

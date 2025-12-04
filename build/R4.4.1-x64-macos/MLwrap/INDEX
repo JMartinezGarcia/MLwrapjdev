@@ -39,4 +39,3 @@ table_pfi_results       Permutation Feature Importance Results Table
 table_shap_results      SHAP Summarized Results Table
 table_sobol_jansen_results
                         Sobol-Jansen Results Table
-tutorial                MLwrap Comprehensive Tutorial

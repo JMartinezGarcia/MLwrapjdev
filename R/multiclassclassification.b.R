@@ -23,8 +23,6 @@ MulticlassClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) 
             private$.form <- NULL
             private$.feature_names <- NULL
 
-            #private$.checkArguments()
-
             # Get output class names
 
             if (!is.null(self$options$dep)){
@@ -150,77 +148,38 @@ MulticlassClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) 
 
         .initSensitivityPlots = function(){
 
-            if (self$options$pfi){
+                if (self$options$shap_mean == TRUE){
 
-                for (class_name in private$.class_names){
-
-                    key = paste0("Permutation Feature Importance (", class_name, ")")
-
-                    self$results$plots_pfi$addItem(key = key)
-
-                }
-
-            }
-
-            if (self$options$shap_mean){
-
-                for (class_name in private$.class_names){
-
-                    key = paste0("Mean Absolute SHAP (", class_name, ")")
+                    key = 'Mean Absolute SHAP'
 
                     self$results$plots_shap$addItem(key = key)
 
                 }
 
-            }
+                if (self$options$shap_dir){
 
-            if (self$options$shap_dir){
-
-                for (class_name in private$.class_names){
-
-                    key = paste0("Directional SHAP (", class_name, ")")
+                    key = "Directional SHAP"
 
                     self$results$plots_shap$addItem(key = key)
 
                 }
 
-            }
+                if (self$options$shap_box){
 
-            if (self$options$shap_box){
-
-                for (class_name in private$.class_names){
-
-                    key = paste0("SHAP Boxplot (", class_name, ")")
+                    key = "SHAP Boxplot"
 
                     self$results$plots_shap$addItem(key = key)
 
+
                 }
 
-            }
+                if (self$options$shap_swarm){
 
-            if (self$options$shap_swarm){
-
-                for (class_name in private$.class_names){
-
-                    key = paste0("SHAP Swarm Plot (", class_name, ")")
+                    key = 'SHAP Swarm Plot'
 
                     self$results$plots_shap$addItem(key = key)
-
                 }
 
-            }
-
-            if (self$options$olden){
-
-                for (class_name in private$.class_names){
-
-                    key = paste0("Olden Importance Plot (", class_name, ")")
-
-                    self$results$plots_olden$addItem(key = key)
-
-                }
-
-            }
 
         },
 
@@ -409,10 +368,11 @@ MulticlassClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) 
 
             set.seed(self$options$seed)
 
-            if (!self$options$disable) {
-                print("Análisis desactivado por el usuario (‘Don’t run’ marcado).")
+            if (!self$options$run) {
                 return()
             }
+
+            private$.checkArguments()
 
             private$.finalData()
 
@@ -424,7 +384,7 @@ MulticlassClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) 
 
                 self$results$.setModel(analysis_object)
 
-                private$.feature_names <- private$.getFeatureNames(self$results$model)
+                private$.feature_names <- analysis_object$feature_names
 
             }
 
@@ -433,6 +393,8 @@ MulticlassClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) 
                 private$.compute()
 
             }
+
+            private$.checkpoint()
 
             ## populate
 
@@ -453,6 +415,11 @@ MulticlassClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) 
              private$.populateResultsPlots()
              private$.populateSensitivityPlots()
              private$.populateSensitivityTables()
+             private$.checkpoint()
+             private$.populateFeatureInteracionPlots()
+             private$.populateFeatureInteractionTables()
+             private$.checkpoint()
+             private$.populateFunctionalDependencePlots()
              private$.populateOutputs()
 
         },
@@ -471,7 +438,7 @@ MulticlassClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) 
                                                      y_levels = private$.class_names
                                                     )
 
-            private$.feature_names <- private$.getFeatureNames(analysis_object)
+            private$.feature_names <- analysis_object$feature_names
 
             # Build Model
 
@@ -496,12 +463,16 @@ MulticlassClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) 
 
             # Fine Tuning
 
+            private$.checkpoint()
+
             tuner <- private$.getTuner()
 
             analysis_object <- MLwrap::fine_tuning(analysis_object, tuner = tuner,
                                                    metrics = self$options$metrics)
 
             # Sensitivity Analysis
+
+            private$.checkpoint()
 
             sensitivity_methods <- private$.getSensitivityMethods(model_name)
 
@@ -565,21 +536,6 @@ MulticlassClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) 
             old_hash <- readLines(hash_file)
 
             return(old_hash == new_hash)
-
-        },
-
-        .getFeatureNames = function(analysis_object){
-
-            y = all.vars(analysis_object$formula)[1]
-
-            rec =  analysis_object$transformer |>
-                recipes::prep(training = analysis_object$train_data)
-
-            bake_test = recipes::bake(rec, new_data = analysis_object$test_data)
-
-            feat_names <- names(bake_test)[which(names(bake_test) != y)]
-
-            return(feat_names)
 
         },
 
@@ -1068,6 +1024,8 @@ MulticlassClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) 
 
             }
 
+            methods = c(methods, "Friedman H-stat")
+
             return(methods)
 
         },
@@ -1148,7 +1106,7 @@ MulticlassClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) 
             colnames(olden_res) <- private$.feature_names
             olden_res$class <- private$.class_names
 
-            #olden_res <- olden_res %>% dplyr::relocate("class")
+            #olden_res <- olden_res |> dplyr::relocate("class")
 
             return(olden_res)
 
@@ -1206,11 +1164,9 @@ MulticlassClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) 
 
         .populateHyperparametersTable = function(analysis_object){
 
-            key = "Best Hyperparameters"
+            self$results$tuner_table$setVisible(TRUE)
 
-            self$results$tuner_table$addItem(key = key)
-
-            table <- self$results$tuner_table[["\"Best Hyperparameters\""]]
+            table <- self$results$tuner_table
 
             hyp_names_tune <- names(analysis_object$hyperparameters$hyperparams_ranges)
 
@@ -1240,11 +1196,9 @@ MulticlassClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) 
 
         .populateTunerPlots = function(){
 
-            key = 'Tuner Search Results'
+            self$results$plot_tuner$setVisible(TRUE)
 
-            self$results$plot_tuner$addItem(key = key)
-
-            self$results$plot_tuner[["\"Tuner Search Results\""]]$setState("tuner_search_results")
+            self$results$plot_tuner$setState("tuner_search_results")
 
         },
 
@@ -1323,7 +1277,7 @@ MulticlassClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) 
 
             for (class_name in private$.class_names){
 
-                pfi_class <- pfi_res[[paste0("PFI_", class_name)]]
+                pfi_class <- pfi_res |> dplyr::filter(output_class == class_name)
 
                 table_key <- paste0("Permutation Feature Importance (", class_name, ")")
 
@@ -1359,7 +1313,7 @@ MulticlassClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) 
 
             for (class_name in private$.class_names){
 
-                shap_class <- shap_res[[paste0("SHAP_", class_name)]]
+                shap_class <- shap_res |> dplyr::filter(output_class == class_name)
 
                 table_key <- paste0("SHAP Summary Importance (", class_name, ")")
 
@@ -1429,75 +1383,215 @@ MulticlassClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) 
 
             if (self$options$pfi){
 
-                for (class_name in private$.class_names){
+                self$results$plots_pfi$setState("PFI_barplot")
 
-                    class_key <- paste0("Permutation Feature Importance (", class_name, ")")
-
-                    self$results$plots_pfi[[paste0("\"", class_key, "\"")]]$setState(paste0("PFI_", class_name, "_barplot"))
-
-                }
             }
 
             if (self$options$shap_mean){
 
-                for (class_name in private$.class_names){
-
-                    class_key <- paste0("Mean Absolute SHAP (", class_name, ")")
-
-                    self$results$plots_shap[[paste0("\"", class_key, "\"")]]$setState(paste0("SHAP_", class_name, "_barplot"))
-
-                }
+                self$results$plots_shap[["\"Mean Absolute SHAP\""]]$setState("SHAP_barplot")
 
             }
 
             if (self$options$shap_dir){
 
-                for (class_name in private$.class_names){
-
-                    class_key <- paste0("Directional SHAP (", class_name, ")")
-
-                    self$results$plots_shap[[paste0("\"", class_key, "\"")]]$setState(paste0("SHAP_", class_name, "_directional"))
-
-                }
+                self$results$plots_shap[["\"Directional SHAP\""]]$setState("SHAP_directional")
 
             }
 
             if (self$options$shap_box){
 
-                for (class_name in private$.class_names){
-
-                    class_key <- paste0("SHAP Boxplot (", class_name, ")")
-
-                    self$results$plots_shap[[paste0("\"", class_key, "\"")]]$setState(paste0("SHAP_", class_name, "_boxplot"))
-
-                }
+                self$results$plots_shap[["\"SHAP Boxplot\""]]$setState("SHAP_boxplot")
 
             }
 
             if (self$options$shap_swarm){
 
-                for (class_name in private$.class_names){
-
-                    class_key <- paste0("SHAP Swarm Plot (", class_name, ")")
-
-                    self$results$plots_shap[[paste0("\"", class_key, "\"")]]$setState(paste0("SHAP_", class_name, "_swarmplot"))
-
-                }
-
+                self$results$plots_shap[["\"SHAP Swarm Plot\""]]$setState("SHAP_swarmplot")
             }
 
             if (self$options$olden){
 
-                for (class_name in private$.class_names){
+                self$results$plots_olden$setState("Olden")
 
-                    class_key = paste0("Olden Importance Plot (", class_name, ")")
+            }
 
-                    self$results$plots_olden[[paste0("\"", class_key, "\"")]]$setState(class_name)
+        },
+
+        .populateFeatureInteracionPlots = function(){
+
+            if (self$options$h2_total){
+
+                self$results$h2_total_plot$setState(TRUE)
+
+            }
+
+            if (self$options$h2_pair_norm){
+
+                self$results$h2_pair_norm_plot$setState(TRUE)
+
+            }
+
+            if (self$options$h2_pair_raw){
+
+                self$results$h2_pair_raw_plot$setState(TRUE)
+
+            }
+
+        },
+
+        .populateFeatureInteractionTables = function(){
+
+            if (self$options$h2_total){
+
+                h2_table <- self$results$model$tables[["H^2 Total"]]
+
+                table_res <- self$results$friedman_hstat
+
+                n_col <- ncol(h2_table)
+
+                col_names <- names(h2_table)
+
+                for (i in 2:n_col){
+
+                    table_res$addColumn(name = col_names[[i]], title = col_names[[i]], superTitle = "H\u00B2 Normalized")
+                }
+
+                for (i in 1:nrow(h2_table)){
+
+                    table_res$addRow(rowKey = i)
+
+                    table_res$setRow(rowNo = i, values = h2_table[i,]
+                    )
 
                 }
 
             }
 
+            if (self$options$h2_pair_norm){
+
+                h2_pair_norm <- self$results$model$tables[["H^2 Pairwise Normalized"]]
+
+                table_res <- self$results$pairwise_hstat_norm
+
+                n_col <- ncol(h2_pair_norm)
+
+                col_names <- names(h2_pair_norm)
+
+                for (i in 2:n_col){
+
+                    table_res$addColumn(name = col_names[[i]], title = col_names[[i]], superTitle = "H\u00B2 Normalized")
+                }
+
+                for (i in 1:nrow(h2_pair_norm)){
+
+                    table_res$addRow(rowKey = i)
+
+                    table_res$setRow(rowNo = i, values = h2_pair_norm[i,]
+
+                    )
+
+                }
+
+            }
+
+            if (self$options$h2_pair_raw){
+
+                h2_pair_raw <- self$results$model$tables[["H^2 Pairwise Raw"]]
+
+                table_res <- self$results$pairwise_hstat_raw
+
+                n_col <- ncol(h2_pair_raw)
+
+                col_names <- names(h2_pair_raw)
+
+                for (i in 2:n_col){
+
+                    table_res$addColumn(name = col_names[[i]], title = col_names[[i]], superTitle = "H\u00B2 Raw")
+                }
+
+                for (i in 1:nrow(h2_pair_raw)){
+
+                    table_res$addRow(rowKey = i)
+
+                    table_res$setRow(rowNo = i, values = h2_pair_raw[i,]
+
+                    )
+
+                }
+
+            }
+
+        },
+
+        .populateFunctionalDependencePlots = function(){
+
+            if (self$options$mode2 == "pdp_mode"){
+
+                plot_terms <- self$options$pdp_terms
+                results_group <- self$results$pdp_plots
+
+                for (i in seq_along(plot_terms)) {
+
+                    block = plot_terms[[i]]
+
+                    if (is.null(block) || length(block) == 0)
+                        next  # skip empty blocks
+
+                    if (length(block) == 1) {
+                        feature <- block[1]
+                        groupby <- NULL
+                        key <- glue::glue("Partial Dependence Plot of {feature}")
+                    } else if (length(block) == 2) {
+                        feature <- block[1]
+                        groupby <- block[2]
+                        key <- glue::glue("Partial Dependence Plot of {feature} by {groupby}")
+                    } else {
+                        stop("Each PDP term block must contain 1 or 2 variables.")
+                    }
+
+
+                    img <- results_group$addItem(key = key)
+                    img$setState(list(
+                        feature = feature,
+                        groupby = groupby
+                    ))
+
+                }
+            } else {
+
+                plot_terms <- self$options$ale_terms
+                results_group <- self$results$ale_plots
+
+                for (i in seq_along(plot_terms)) {
+
+                    block = plot_terms[[i]]
+
+                    if (is.null(block) || length(block) == 0)
+                        next  # skip empty blocks
+
+                    if (length(block) == 1) {
+                        feature <- block[1]
+                        groupby <- NULL
+                        key <- glue::glue("ALE Plot of {feature}")
+                    } else if (length(block) == 2) {
+                        feature <- block[1]
+                        groupby <- block[2]
+                        key <- glue::glue("ALE Plot of {feature} by {groupby}")
+                    } else {
+                        stop("Each ALE term block must contain 1 or 2 variables.")
+                    }
+
+
+                    img <- results_group$addItem(key = key)
+                    img$setState(list(
+                        feature = feature,
+                        groupby = groupby
+                    ))
+
+                }
+
+            }
         },
 
         .populateOutputs = function(){
@@ -1621,40 +1715,218 @@ MulticlassClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) 
 
             olden_imp <- self$results$model$sensitivity_analysis$Olden
 
-            # Select class form class_key
+            olden_long <- olden_imp |>
+                tidyr::pivot_longer(
+                    cols = -class,
+                    names_to = "variable",
+                    values_to = "importance"
+                )
 
-            olden_imp <- olden_imp %>% dplyr::filter(class == class_key) %>%
-                          dplyr::select(-class)
+            olden_long <- olden_long |>
+                dplyr::group_by(class) |>
+                dplyr::mutate(
+                    variable = reorder(variable, -importance)  # per-class descending order
+                ) |>
+                dplyr::ungroup()
 
-            df <- data.frame(
-                variable   = colnames(olden_imp),
-                importance = as.numeric(olden_imp)
-            )
+            offset <- 0.05 * max(abs(olden_long$importance))
 
-
-            # Order decreasing
-            df$variable <- factor(df$variable, levels = df$variable[order(df$importance, decreasing = T)])
-
-            # Plot
-            p <- ggplot2::ggplot(df, ggplot2::aes(x = variable, y = importance, fill = importance > 0)) +
+            p <- ggplot2::ggplot(olden_long,
+                            ggplot2::aes(
+                                x = variable,
+                                y = importance,
+                                fill = importance > 0
+                            )
+            ) +
                 ggplot2::geom_col(show.legend = FALSE) +
-                ggplot2::geom_text(ggplot2::aes(label = round(importance, 3)),
-                                   vjust = ifelse(df$importance >= 0, -0.5, 1.2)) +
-                ggplot2::scale_fill_manual(values = c("TRUE" = "steelblue", "FALSE" = "firebrick")) +
+
+                ggplot2::geom_text(
+                    ggplot2::aes(
+                        label = round(importance, 3),
+                        y = importance + ifelse(importance > 0, offset, -offset)
+                    ),
+                    size = 3
+                ) +
+
+                ggplot2::scale_fill_manual(
+                    values = c("TRUE" = "steelblue", "FALSE" = "firebrick")
+                ) +
+
                 ggplot2::geom_hline(yintercept = 0, linetype = "dashed") +
+
+                ggplot2::facet_wrap(~ class, scales = "free_y") +
+
                 ggplot2::labs(
-                    title = paste0("Olden Feature Importance (", class_key, ")"),
+                    title = "Olden Feature Importance (Multiclass)",
                     x = "Feature",
                     y = "Olden Feature Importance"
                 ) +
+
                 ggplot2::theme_grey() +
-                ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1))
+                ggplot2::theme(
+                    axis.text.x  = ggplot2::element_text(angle = 45, hjust = 1),
+                    strip.text   = ggplot2::element_text(size = 12, face = "bold")
+                )
+
+            print(p)
+        },
+
+        .plot_h2_total = function(image, ...){
+
+            plot_key <- image$state
+
+            if (is.null(plot_key)){return(FALSE)}
+
+            p <- self$results$model$plots[["H^2 Total"]]
 
             print(p)
 
         },
 
+        .plot_h2_pair_norm = function(image, ...){
+
+            plot_key <- image$state
+
+            if (is.null(plot_key)){return(FALSE)}
+
+            p <- self$results$model$plots[["H^2 Pairwise Normalized"]]
+
+            print(p)
+
+        },
+
+        .plot_h2_pair_raw = function(image, ...){
+
+            plot_key <- image$state
+
+            if (is.null(plot_key)){return(FALSE)}
+
+            p <- self$results$model$plots[["H^2 Pairwise Raw"]]
+
+            print(p)
+
+        },
+
+
+        .plot_pdp = function(image, ...){
+
+            state <- image$state
+            if (is.null(state)){return(FALSE)}
+
+            feature <- state[[1]]
+            group_by <- state[[2]]
+
+            p <- MLwrap::plot_pdp(self$results$model, feature = feature,
+                                  group_by = group_by,
+                                  show_ice = self$options$show_ice,
+                                  plot = F)
+            print(p)
+
+        },
+
+        .plot_ale = function(image, ...){
+
+            state <- image$state
+            if (is.null(state)){return(FALSE)}
+
+            feature <- state[[1]]
+            group_by <- state[[2]]
+
+            p <- MLwrap::plot_ale(self$results$model, feature = feature,
+                                  group = group_by,
+                                  plot = F)
+            print(p)
+
+        },
+
+
         ### Utilities
+
+        .validate_ale_terms = function() {
+
+            ale_terms <- self$options$ale_terms
+            factors   <- self$options$factors
+
+            # skip if empty, NULL, or NA
+            if (is.null(ale_terms) || identical(ale_terms, NA))
+                return()
+
+            # Convert to data.frame if jamovi gives list(list())
+            if (!is.data.frame(ale_terms)) {
+                ale_terms <- as.data.frame(ale_terms, stringsAsFactors = FALSE)
+            }
+
+            if (ncol(ale_terms) == 0)
+                return()
+
+            # For each BLOCK (each column)
+            for (block_i in seq_len(ncol(ale_terms))) {
+
+                block <- ale_terms[[block_i]]
+
+                # Clean empty values
+                block <- block[!is.na(block) & block != ""]
+
+                if (length(block) == 0)
+                    next
+
+                # FIRST variable in the block
+                first_var <- block[1]
+
+                if (first_var %in% factors) {
+                    stop(sprintf(
+                        "Error in ALE term %d: the first variable ('%s') must be continuous.",
+                        block_i, first_var
+                    ))
+                }
+            }
+        },
+
+        .validate_pdp_terms = function(){
+
+            pdp_terms <- self$options$pdp_terms
+            factors   <- self$options$factors
+
+            # skip if empty, NULL, or NA
+            if (is.null(pdp_terms) || identical(pdp_terms, NA))
+                return()
+
+            # Convert to data.frame if jamovi gives list(list())
+            if (!is.data.frame(pdp_terms)) {
+                pdp_terms <- as.data.frame(pdp_terms, stringsAsFactors = FALSE)
+            }
+
+            if (ncol(pdp_terms) == 0)
+                return()
+
+            # For each BLOCK (each column)
+            for (block_i in seq_len(ncol(pdp_terms))) {
+
+                block <- pdp_terms[[block_i]]
+
+                # Clean empty values
+                block <- block[!is.na(block) & block != ""]
+
+                if (length(block) == 0)
+                    next
+
+                # FIRST variable in the block
+                first_var <- block[1]
+
+                if (first_var %in% factors) {
+                    stop(sprintf(
+                        "Error in PDP term %d: the first variable ('%s') must be continuous.",
+                        block_i, first_var
+                    ))
+                }
+            }
+
+
+            # check pdp and ale terms
+
+            private$.validate_ale_terms()
+            private$.validate_pdp_terms()
+        },
 
         .check_levels = function(dep_levels){
 
@@ -1707,6 +1979,30 @@ MulticlassClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) 
             if (length(missing_factors) > 0) {
                 stop(sprintf("Factor(s) %s is/are not being used. Add it to factors or remove it from factor encoding.", paste(missing_factors, collapse = ", ")))
             }
+
+            for (factor in self$options$factors){
+
+                x <- self$data[[factor]]
+
+                lev <- as.character(levels(x))
+
+                if ((length(levels(x)) > 2) && !(factor %in% self$options$encCat)){
+
+                    stop("All non-binary factors should be One Hot Encoded during Preprocessing!")
+
+                }
+
+                else if ((!setequal(lev, c("0", "1"))) && !(factor %in% self$options$encCat)) {
+
+                    stop("All binary factors should be binarized to (0,1) or One Hot Encoded during Preprocessing!")
+                }
+            }
+
+
+            # check pdp and ale terms
+
+            private$.validate_ale_terms()
+            private$.validate_pdp_terms()
 
         },
 

@@ -14,7 +14,6 @@ RegressionClass <- R6::R6Class(
 
         .init = function(){
 
-            #private$.checkArguments()
             private$.dat <- NULL
             private$.form <- NULL
             private$.sobol_jansen <- FALSE
@@ -23,7 +22,6 @@ RegressionClass <- R6::R6Class(
             private$.initSummaryTable()
             private$.initResultsPlots()
             private$.initSensitivityPlots()
-            private$.initSensitivityTables()
 
         },
 
@@ -129,43 +127,6 @@ RegressionClass <- R6::R6Class(
 
         },
 
-        .initSensitivityTables = function(){
-
-            if (self$options$pfi){
-
-                key = "Permutation Feature Importance"
-
-                self$results$table_sensitivity$addItem(key = key)
-
-            }
-
-            if (any(c(self$options$shap_mean, self$options$shap_dir,
-                      self$options$shap_box, self$options$shap_swarm))){
-
-                key = 'SHAP Summary Importance'
-
-                self$results$table_sensitivity$addItem(key = key)
-
-            }
-
-            if (self$options$olden){
-
-                key = "Olden Importance"
-
-                self$results$table_sensitivity$addItem(key = key)
-
-            }
-
-            if (self$options$sobol){
-
-                key = "Sobol-Jansen Sensitivity Importance"
-
-                self$results$table_sensitivity$addItem(key = key)
-
-            }
-
-        },
-
         .getSummaryMetrics = function(options, add_dataset = FALSE){
 
             if (add_dataset){
@@ -248,15 +209,15 @@ RegressionClass <- R6::R6Class(
 
             private$.setInfo()
 
-            set.seed(self$options$seed)
-
-            if (!self$options$disable) {
-                print("Análisis desactivado por el usuario (‘Don’t run’ marcado).")
+            if (!self$options$run) {
                 return()
             }
 
-            private$.finalData()
+            private$.checkArguments()
 
+            set.seed(self$options$seed)
+
+            private$.finalData()
 
             if (private$.compare_hash()){
 
@@ -274,13 +235,15 @@ RegressionClass <- R6::R6Class(
 
                 }
 
-                private$.feature_names <- private$.getFeatureNames(self$results$model)
+                private$.feature_names <- self$results$model$feature_names
 
 
 
             ## populate
 
             private$.populateSummaryMetrics()
+
+            private$.checkpoint()
 
             if (self$results$model$hyperparameters$tuning){
 
@@ -295,8 +258,14 @@ RegressionClass <- R6::R6Class(
             }
 
             private$.populateResultsPlots()
+            private$.checkpoint()
             private$.populateSensitivityPlots()
             private$.populateSensitivityTables()
+            private$.checkpoint()
+            private$.populateFeatureInteracionPlots()
+            private$.populateFeatureInteractionTables()
+            private$.checkpoint()
+            private$.populateFunctionalDependencePlots()
             private$.populateOutputs()
 
         },
@@ -316,7 +285,7 @@ RegressionClass <- R6::R6Class(
 
             # Build Model
 
-            private$.feature_names <- private$.getFeatureNames(analysis_object)
+            private$.feature_names <- analysis_object$feature_names
 
             names_and_hyperparameters <- private$.getHyperparameters()
 
@@ -339,12 +308,16 @@ RegressionClass <- R6::R6Class(
 
             # Fine Tuning
 
+            private$.checkpoint()
+
             tuner <- private$.getTuner()
 
             analysis_object <- MLwrap::fine_tuning(analysis_object, tuner = tuner,
                                                    metrics = self$options$metrics)
 
             # Sensitivity Analysis
+
+            private$.checkpoint()
 
             sensitivity_methods <- private$.getSensitivityMethods(model_name)
 
@@ -407,21 +380,6 @@ RegressionClass <- R6::R6Class(
             old_hash <- readLines(hash_file)
 
             return(old_hash == new_hash)
-
-        },
-
-        .getFeatureNames = function(analysis_object){
-
-            y = all.vars(analysis_object$formula)[1]
-
-            rec =  analysis_object$transformer |>
-                recipes::prep(training = analysis_object$train_data)
-
-            bake_test = recipes::bake(rec, new_data = analysis_object$test_data)
-
-            feat_names <- names(bake_test)[which(names(bake_test) != y)]
-
-            return(feat_names)
 
         },
 
@@ -765,6 +723,8 @@ RegressionClass <- R6::R6Class(
 
             }
 
+            methods = c(methods, "Friedman H-stat")
+
             return(methods)
 
         },
@@ -851,11 +811,9 @@ RegressionClass <- R6::R6Class(
 
         .populateHyperparametersTable = function(analysis_object){
 
-            key = "Best Hyperparameters"
+            table <- self$results$tuner_table
 
-            self$results$tuner_table$addItem(key = key)
-
-            table <- self$results$tuner_table[["\"Best Hyperparameters\""]]
+            table$setVisible(TRUE)
 
             hyp_names_tune <- names(analysis_object$hyperparameters$hyperparams_ranges)
 
@@ -887,11 +845,9 @@ RegressionClass <- R6::R6Class(
 
         .populateTunerPlots = function(){
 
-            key = 'Tuner Search Results'
+            self$results$plot_tuner$setVisible(TRUE)
 
-            self$results$plot_tuner$addItem(key = key)
-
-            self$results$plot_tuner[["\"Tuner Search Results\""]]$setState("tuner_search_results")
+            self$results$plot_tuner$setState("tuner_search_results")
 
         },
 
@@ -962,17 +918,35 @@ RegressionClass <- R6::R6Class(
 
         },
 
+        .populateFeatureInteracionPlots = function(){
+
+          if (self$options$h2_total){
+
+              self$results$h2_total_plot$setState(TRUE)
+
+          }
+
+          if (self$options$h2_pair_norm){
+
+                self$results$h2_pair_norm_plot$setState(TRUE)
+
+          }
+
+          if (self$options$h2_pair_raw){
+
+                self$results$h2_pair_raw_plot$setState(TRUE)
+
+            }
+
+        },
+
         .populateSensitivityTables = function(){
 
           if (self$options$pfi){
 
               pfi_res <- self$results$model$sensitivity_analysis$PFI
 
-              table <- self$results$table_sensitivity[["\"Permutation Feature Importance\""]]
-
-              table$addColumn(name = "feature_importance", title = "Mean Importance")
-
-              table$addColumn(name = "std", title = "StDev")
+              table <- self$results$table_pfi
 
               for (i in 1:length(private$.feature_names)){
 
@@ -994,15 +968,9 @@ RegressionClass <- R6::R6Class(
 
         if (any(self$options$shap_mean, self$options$shap_dir, self$options$shap_box, self$options$shap_swarm)){
 
-                shap_res <- MLwrap::table_shap_results(self$results$model)$SHAP
+                shap_res <- MLwrap::table_shap_results(self$results$model)
 
-                table <- self$results$table_sensitivity[["\"SHAP Summary Importance\""]]
-
-                table$addColumn(name = "feature_importance", title = "Mean Abs SHAP")
-
-                table$addColumn(name = "std", title = "StDev")
-
-                table$addColumn(name = "dir_shap", title = "Directional SHAP Importance")
+                table <- self$results$table_shap
 
                 for (i in 1:length(private$.feature_names)){
 
@@ -1026,9 +994,7 @@ RegressionClass <- R6::R6Class(
 
             olden_imp <- self$results$model$sensitivity_analysis$Olden
 
-            table <- self$results$table_sensitivity[["\"Olden Importance\""]]
-
-            table$addColumn(name = "feature_importance", title = "Importance")
+            table <- self$results$table_olden
 
             for (i in 1:length(private$.feature_names)){
 
@@ -1051,23 +1017,7 @@ RegressionClass <- R6::R6Class(
 
             sobol_res <- MLwrap::table_sobol_jansen_results(self$results$model)
 
-            table <- self$results$table_sensitivity[["\"Sobol-Jansen Sensitivity Importance\""]]
-
-            table$addColumn(name = "first_order", title = "First Order")
-
-            table$addColumn(name = "first_order_std", title = "StDev")
-
-            table$addColumn(name = "first_order_min", title = "Min CI")
-
-            table$addColumn(name = "first_order_max", title = "Max CI")
-
-            table$addColumn(name = "total_order", title = "Total Order")
-
-            table$addColumn(name = "total_order_std", title = "StDev")
-
-            table$addColumn(name = "total_order_min", title = "Min CI")
-
-            table$addColumn(name = "total_order_max", title = "Max CI")
+            table <- self$results$table_sobol
 
             for (i in 1:length(private$.feature_names)){
 
@@ -1091,6 +1041,128 @@ RegressionClass <- R6::R6Class(
 
         }
 
+        },
+
+        .populateFeatureInteractionTables = function(){
+
+            if (self$options$h2_total){
+
+                h2_table <- self$results$model$tables[["H^2 Total"]]
+
+                table_res <- self$results$friedman_hstat
+
+                for (i in 1:nrow(h2_table)){
+
+                    table_res$addRow(rowKey = i)
+
+                    table_res$setRow(rowNo = i, values = list(
+
+                        Feature = h2_table$Feature[[i]],
+                        H2_stat = h2_table[["H^2 Normalized"]][[i]]
+
+                    ))
+
+                }
+
+            }
+
+            if (self$options$h2_pair_norm || self$options$h2_pair_raw){
+
+                h2_pair_norm <- self$results$model$tables[["H^2 Pairwise Normalized"]]
+
+                h2_pair_raw <- self$results$model$tables[["H^2 Pairwise Raw"]]
+
+                h2_joined <- h2_pair_norm |>
+                    dplyr::left_join(h2_pair_raw, by = "Pairwise Interaction")
+
+                table_res <- self$results$pairwise_hstat
+
+                for (i in 1:nrow(h2_joined)){
+
+                    table_res$addRow(rowKey = i)
+
+                    table_res$setRow(rowNo = i, values = list(
+
+                        Feature = h2_joined[["Pairwise Interaction"]][[i]],
+                        H2_stat_norm = h2_joined[["H^2 Normalized"]][[i]],
+                        H2_stat_raw = h2_joined[["H^2 Raw"]][[i]]
+
+                    ))
+
+                }
+
+            }
+
+        },
+
+        .populateFunctionalDependencePlots = function(){
+
+            if (self$options$mode2 == "pdp_mode"){
+
+                plot_terms <- self$options$pdp_terms
+                results_group <- self$results$pdp_plots
+
+                for (i in seq_along(plot_terms)) {
+
+                        block = plot_terms[[i]]
+
+                        if (is.null(block) || length(block) == 0)
+                            next  # skip empty blocks
+
+                        if (length(block) == 1) {
+                            feature <- block[1]
+                            groupby <- NULL
+                            key <- glue::glue("Partial Dependence Plot of {feature}")
+                        } else if (length(block) == 2) {
+                            feature <- block[1]
+                            groupby <- block[2]
+                            key <- glue::glue("Partial Dependence Plot of {feature} by {groupby}")
+                        } else {
+                            stop("Each PDP term block must contain 1 or 2 variables.")
+                        }
+
+
+                    img <- results_group$addItem(key = key)
+                    img$setState(list(
+                        feature = feature,
+                        groupby = groupby
+                    ))
+
+                }
+            } else {
+
+                plot_terms <- self$options$ale_terms
+                results_group <- self$results$ale_plots
+
+                for (i in seq_along(plot_terms)) {
+
+                    block = plot_terms[[i]]
+
+                    if (is.null(block) || length(block) == 0)
+                        next  # skip empty blocks
+
+                    if (length(block) == 1) {
+                        feature <- block[1]
+                        groupby <- NULL
+                        key <- glue::glue("ALE Plot of {feature}")
+                    } else if (length(block) == 2) {
+                        feature <- block[1]
+                        groupby <- block[2]
+                        key <- glue::glue("ALE Plot of {feature} by {groupby}")
+                    } else {
+                        stop("Each ALE term block must contain 1 or 2 variables.")
+                    }
+
+
+                    img <- results_group$addItem(key = key)
+                    img$setState(list(
+                        feature = feature,
+                        groupby = groupby
+                    ))
+
+                }
+
+            }
         },
 
         .populateOutputs = function() {
@@ -1218,7 +1290,155 @@ RegressionClass <- R6::R6Class(
 
             },
 
+        .plot_h2_total = function(image, ...){
+
+            plot_key <- image$state
+
+            if (is.null(plot_key)){return(FALSE)}
+
+            p <- self$results$model$plots[["H^2 Total"]]
+
+            print(p)
+
+        },
+
+        .plot_h2_pair_norm = function(image, ...){
+
+            plot_key <- image$state
+
+            if (is.null(plot_key)){return(FALSE)}
+
+            p <- self$results$model$plots[["H^2 Pairwise Normalized"]]
+
+            print(p)
+
+        },
+
+        .plot_h2_pair_raw = function(image, ...){
+
+            plot_key <- image$state
+
+            if (is.null(plot_key)){return(FALSE)}
+
+            p <- self$results$model$plots[["H^2 Pairwise Raw"]]
+
+            print(p)
+
+        },
+
+        .plot_pdp = function(image, ...){
+
+            state <- image$state
+            if (is.null(state)){return(FALSE)}
+
+            feature <- state[[1]]
+            group_by <- state[[2]]
+
+            p <- MLwrap::plot_pdp(self$results$model, feature = feature,
+                                                      group_by = group_by,
+                                                      show_ice = self$options$show_ice,
+                                                      plot = F)
+            print(p)
+
+        },
+
+        .plot_ale = function(image, ...){
+
+            state <- image$state
+            if (is.null(state)){return(FALSE)}
+
+            feature <- state[[1]]
+            group_by <- state[[2]]
+
+            p <- MLwrap::plot_ale(self$results$model, feature = feature,
+                                                      group = group_by,
+                                                      plot = F)
+            print(p)
+
+        },
+
+
         # Utilities
+
+        .validate_ale_terms = function() {
+
+            ale_terms <- self$options$ale_terms
+            factors   <- self$options$factors
+
+            # skip if empty, NULL, or NA
+            if (is.null(ale_terms) || identical(ale_terms, NA))
+                return()
+
+            # Convert to data.frame if jamovi gives list(list())
+            if (!is.data.frame(ale_terms)) {
+                ale_terms <- as.data.frame(ale_terms, stringsAsFactors = FALSE)
+            }
+
+            if (ncol(ale_terms) == 0)
+                return()
+
+            # For each BLOCK (each column)
+            for (block_i in seq_len(ncol(ale_terms))) {
+
+                block <- ale_terms[[block_i]]
+
+                # Clean empty values
+                block <- block[!is.na(block) & block != ""]
+
+                if (length(block) == 0)
+                    next
+
+                # FIRST variable in the block
+                first_var <- block[1]
+
+                if (first_var %in% factors) {
+                    stop(sprintf(
+                        "Error in ALE term %d: the first variable ('%s') must be continuous.",
+                        block_i, first_var
+                    ))
+                }
+            }
+        },
+
+        .validate_pdp_terms = function(){
+
+            pdp_terms <- self$options$pdp_terms
+            factors   <- self$options$factors
+
+            # skip if empty, NULL, or NA
+            if (is.null(pdp_terms) || identical(pdp_terms, NA))
+                return()
+
+            # Convert to data.frame if jamovi gives list(list())
+            if (!is.data.frame(pdp_terms)) {
+                pdp_terms <- as.data.frame(pdp_terms, stringsAsFactors = FALSE)
+            }
+
+            if (ncol(pdp_terms) == 0)
+                return()
+
+            # For each BLOCK (each column)
+            for (block_i in seq_len(ncol(pdp_terms))) {
+
+                block <- pdp_terms[[block_i]]
+
+                # Clean empty values
+                block <- block[!is.na(block) & block != ""]
+
+                if (length(block) == 0)
+                    next
+
+                # FIRST variable in the block
+                first_var <- block[1]
+
+                if (first_var %in% factors) {
+                    stop(sprintf(
+                        "Error in PDP term %d: the first variable ('%s') must be continuous.",
+                        block_i, first_var
+                    ))
+                }
+            }
+        },
 
         .checkArguments = function(){
 
@@ -1259,6 +1479,30 @@ RegressionClass <- R6::R6Class(
                 stop(sprintf("Factor(s) %s is/are not being used. Add it to factors or remove it from factor encoding.", paste(missing_factors, collapse = ", ")))
             }
 
+            # Check non-encoded factors are binary
+
+            for (factor in self$options$factors){
+
+                    x <- self$data[[factor]]
+
+                    lev <- as.character(levels(x))
+
+                    if ((length(levels(x))) > 2 && !(factor %in% self$options$encCat)){
+
+                        stop("All non-binary factors should be One Hot Encoded during Preprocessing!")
+
+                    }
+
+                    else if ((!setequal(lev, c("0", "1"))) && !(factor %in% self$options$encCat)) {
+
+                        stop("All binary factors should be binarized to (0,1) or One Hot Encoded during Preprocessing!")
+                    }
+            }
+
+            # check pdp and ale terms
+
+            private$.validate_ale_terms()
+            private$.validate_pdp_terms()
 
         },
 

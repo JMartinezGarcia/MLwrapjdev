@@ -8,8 +8,8 @@ children:
     margin: large
     stretchFactor: 1
     children:
-      - type: CheckBox
-        name: disable
+      - type: ActionButton
+        name: run
       - type: VariableSupplier
         persistentItems: false
         stretchFactor: 1
@@ -692,7 +692,112 @@ children:
                     enable: (show_sobol)
       - type: CollapseBox
         collapsed: true
-        label: Save Results
+        label: Feature Interaction and Functional Dependence
+        style: list
+        stretchFactor: 1
+        children:
+          - type: LayoutBox
+            margin: large
+            children:
+              - type: Label
+                label: <b> Friedman's H-statistic </b>
+              - type: LayoutBox
+                style: inline
+                margin: large
+                children:
+                  - type: CheckBox
+                    name: h2_total
+                  - type: CheckBox
+                    name: h2_pair_norm
+                  - type: CheckBox
+                    name: h2_pair_raw
+          - type: ModeSelector
+            name: mode2
+            stretchFactor: 1
+            children:
+              - type: Content
+                name: pdp_mode
+                children:
+                  - type: LayoutBox
+                    margin: large
+                    stretchFactor: 1
+                    children:
+                      - type: VariableSupplier
+                        name: PDPSupplier
+                        label: Features
+                        populate: manual
+                        stretchFactor: 1
+                        persistentItems: true
+                        events:
+                          update: ./regression::onUpdate_PDPSupplier
+                        children:
+                          - type: TargetLayoutBox
+                            stretchFactor: 1
+                            children:
+                              - type: ListBox
+                                name: pdp_terms
+                                height: large
+                                addButton: Add New Plot
+                                selectable: true
+                                events:
+                                  listItemAdded: ./regression::onChange_pdp_terms
+                                  listItemRemoved: ./regression::onChange_pdp_terms
+                                  change: ./regression::onChange_pdp_terms
+                                template:
+                                  type: LayoutBox
+                                  margin: normal
+                                  targetArea: true
+                                  children:
+                                    - type: VariablesListBox
+                                      name: pdpList
+                                      isTarget: true
+                                      valueFilter: unique
+                                      height: auto
+                                      ghostText: drag variables here
+                      - type: CheckBox
+                        name: show_ice
+              - type: Content
+                name: ale_mode
+                children:
+                  - type: LayoutBox
+                    margin: large
+                    stretchFactor: 1
+                    children:
+                      - type: VariableSupplier
+                        name: ALESupplier
+                        populate: manual
+                        label: Features
+                        stretchFactor: 1
+                        persistentItems: true
+                        events:
+                          update: ./regression::onUpdate_ALESupplier
+                        children:
+                          - type: TargetLayoutBox
+                            stretchFactor: 1
+                            children:
+                              - type: ListBox
+                                name: ale_terms
+                                height: large
+                                addButton: Add New Plot
+                                selectable: true
+                                events:
+                                  listItemAdded: ./regression::onChange_ale_terms
+                                  listItemRemoved: ./regression::onChange_ale_terms
+                                  change: ./regression::onChange_ale_terms
+                                template:
+                                  type: LayoutBox
+                                  margin: normal
+                                  targetArea: true
+                                  children:
+                                    - type: VariablesListBox
+                                      name: aleList
+                                      isTarget: true
+                                      valueFilter: unique
+                                      height: auto
+                                      ghostText: drag variables here
+      - type: CollapseBox
+        collapsed: true
+        label: Save
         style: list
         stretchFactor: 1
         children:
@@ -700,5 +805,5 @@ children:
             name: residuals
           - type: Output
             name: predictions
-          - type: Output    
+          - type: Output
             name: dataset_id

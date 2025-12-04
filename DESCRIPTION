@@ -57,5 +57,5 @@ Imports: jmvcore (>= 0.8),
     sensitivity,
     torch,
     nnet
-Remotes: AlbertSesePsy/MLwrap
+Remotes: JMartinezGarcia/MLwrap
 RoxygenNote: 7.3.2

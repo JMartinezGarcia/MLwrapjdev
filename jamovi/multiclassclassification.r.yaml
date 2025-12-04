@@ -9,7 +9,7 @@ refs:
 
 items:
     - name:  text
-      title: Multiclass Classification
+      title: Summary Results
       type:  Preformatted
 
     - name: summary
@@ -259,21 +259,25 @@ items:
       type: Property
       description: The underlying `aov` object
 
-    - name: plot_tuner
-      title: Tuning Results
-      type: Array
-      description: tuner plots
-      template:
-          title: $key
-          type: Image
-          description: tuner plot
-          width:  500
-          height: 400
-          renderFun: .plot_tuner
-          clearWith:  # <-- here
+    - name: tuner_table
+      title: Best Hyperparameters
+      type: Table
+      description: tuners table results
+      rows:  1
+      visible: false
+      columns:
+            - name: metric
+              title: "Metric"
+              type: text
+            - name: estimate
+              title: "Estimate"
+              type: number
+            - name: std
+              title: "Std Err"
+              type: number
+      clearWith:  # <-- here
                 - seed
                 - dep
-                - dep_level
                 - covs
                 - factors
                 - stdCovs
@@ -330,6 +334,10 @@ items:
                 - fix_cost
                 - min_cost
                 - max_cost
+                - margin_tune
+                - fix_margin
+                - min_margin
+                - max_margin
                 - rbf_sigma_tune
                 - fix_rbf_sigma
                 - min_rbf_sigma
@@ -343,28 +351,17 @@ items:
                 - min_scale_factor
                 - max_scale_factor
 
-    - name: tuner_table
-      title: Best Hyperparameters
-      type: Array
-      description: tuner table results
-      template:
-        title: $key
-        type: Table
-        rows: 1
-        columns:
-            - name: metric
-              title: "Metric"
-              type: text
-            - name: estimate
-              title: "Estimate"
-              type: number
-            - name: std
-              title: "Std Err"
-              type: number
-        clearWith:  # <-- here
+    - name: plot_tuner
+      title: Tuning Results
+      type: Image
+      description: tuners plots
+      width:  900
+      height: 600
+      renderFun: .plot_tuner
+      visible: false
+      clearWith:  # <-- here
                 - seed
                 - dep
-                - dep_level
                 - covs
                 - factors
                 - stdCovs
@@ -421,6 +418,10 @@ items:
                 - fix_cost
                 - min_cost
                 - max_cost
+                - margin_tune
+                - fix_margin
+                - min_margin
+                - max_margin
                 - rbf_sigma_tune
                 - fix_rbf_sigma
                 - min_rbf_sigma
@@ -442,8 +443,8 @@ items:
           title: $key
           type: Image
           description: descriptives plot
-          width: 500
-          height: 400
+          width: 900
+          height: 600
           renderFun: .plot_results
           clearWith:  # <-- here
                 - seed
@@ -518,18 +519,20 @@ items:
                 - min_scale_factor
                 - max_scale_factor
 
+    - name:  text_sen
+      title: Sensitivity Analysis Plots
+      type:  Preformatted
+      visible: (pfi || shap_mean || shap_dir || shap_box || shap_swarm || olden)
+
     - name: plots_pfi
       title: Permutation Feature Importance Plots
-      type: Array
+      type: Image
       description: an array of plots
-      template:
-          title: $key
-          type: Image
-          description: descriptives plot
-          width: 500
-          height: 400
-          renderFun: .plot_pfi
-          clearWith:  # <-- here
+      width: 900
+      height: 600
+      renderFun: .plot_pfi
+      visible: (pfi)
+      clearWith:  # <-- here
                 - seed
                 - dep
                 - dep_level
@@ -610,8 +613,8 @@ items:
           title: $key
           type: Image
           description: descriptives plot
-          width: 500
-          height: 400
+          width: 900
+          height: 600
           renderFun: .plot_shap
           clearWith:  # <-- here
                 - seed
@@ -688,16 +691,13 @@ items:
 
     - name: plots_olden
       title: Olden's Method Sensitivity Plots
-      type: Array
-      description: an array of plots
-      template:
-          title: $key
-          type: Image
-          description: descriptives plot
-          width: 500
-          height: 400
-          renderFun: .plot_olden
-          clearWith:  # <-- here
+      type: Image
+      description: olden barplot
+      width: 900
+      height: 600
+      renderFun: .plot_olden
+      visible: (olden)
+      clearWith:  # <-- here
                 - seed
                 - dep
                 - dep_level
@@ -769,6 +769,12 @@ items:
                 - fix_scale_factor
                 - min_scale_factor
                 - max_scale_factor
+
+    - name:  text_tables
+      title: Sensitivity Analysis Tables
+      type:  Preformatted
+      visible: (pfi || shap_mean || shap_dir || shap_box || shap_swarm || olden)
+
 
     - name: table_pfi
       title: Permutation Feature Importance Tables
@@ -1021,6 +1027,689 @@ items:
                     - name: class
                       title: "Class"
                       type: text
+
+    - name:  text_h2
+      title: "Friedman H-statistics"
+      type:  Preformatted
+      visible: (h2_total || h2_pair_norm || h2_pair_raw)
+
+    - name: h2_total_plot
+      title: "H² Normalized Plot"
+      type: Image
+      description: Friedman H-stat barplot
+      width: 900
+      height: 600
+      renderFun: .plot_h2_total
+      visible: (h2_total)
+      clearWith:  # <-- here
+                - seed
+                - dep
+                - covs
+                - factors
+                - stdCovs
+                - encCat
+                - mode
+                - metrics
+                - tuners
+                - hidden_neurons_tune
+                - fix_n_neurons
+                - min_n_neurons
+                - max_n_neurons
+                - penalty_tune
+                - fix_penalty
+                - min_penalty
+                - max_penalty
+                - mtry_tune
+                - fix_mtry
+                - min_mtry
+                - max_mtry
+                - trees_tune
+                - fix_trees
+                - min_trees
+                - max_trees
+                - min_n_tune
+                - fix_min_n
+                - min_min_n
+                - max_min_n
+                - mtryx_tune
+                - fix_mtryx
+                - min_mtryx
+                - max_mtryx
+                - treesx_tune
+                - fix_treesx
+                - min_treesx
+                - max_treesx
+                - min_nx_tune
+                - fix_min_nx
+                - min_min_nx
+                - max_min_nx
+                - tree_depth_tune
+                - fix_tree_depth
+                - min_tree_depth
+                - max_tree_depth
+                - learn_ratex_tune
+                - fix_learn_ratex
+                - min_learn_ratex
+                - max_learn_ratex
+                - loss_reduction_tune
+                - fix_loss_reduction
+                - min_loss_reduction
+                - max_loss_reduction
+                - kernels
+                - cost_tune
+                - fix_cost
+                - min_cost
+                - max_cost
+                - margin_tune
+                - fix_margin
+                - min_margin
+                - max_margin
+                - rbf_sigma_tune
+                - fix_rbf_sigma
+                - min_rbf_sigma
+                - max_rbf_sigma
+                - degree_tune
+                - fix_degree
+                - min_degree
+                - max_degree
+                - scale_factor_tune
+                - fix_scale_factor
+                - min_scale_factor
+                - max_scale_factor
+
+    - name: h2_pair_norm_plot
+      title: "Pairwise Interaction Plot (Normalized)"
+      type: Image
+      description: Friedman H-stat Pairwise Interaction barplot (normalized)
+      width: 900
+      height: 600
+      renderFun: .plot_h2_pair_norm
+      visible: (h2_pair_norm)
+      clearWith:  # <-- here
+                - seed
+                - dep
+                - covs
+                - factors
+                - stdCovs
+                - encCat
+                - mode
+                - metrics
+                - tuners
+                - hidden_neurons_tune
+                - fix_n_neurons
+                - min_n_neurons
+                - max_n_neurons
+                - penalty_tune
+                - fix_penalty
+                - min_penalty
+                - max_penalty
+                - mtry_tune
+                - fix_mtry
+                - min_mtry
+                - max_mtry
+                - trees_tune
+                - fix_trees
+                - min_trees
+                - max_trees
+                - min_n_tune
+                - fix_min_n
+                - min_min_n
+                - max_min_n
+                - mtryx_tune
+                - fix_mtryx
+                - min_mtryx
+                - max_mtryx
+                - treesx_tune
+                - fix_treesx
+                - min_treesx
+                - max_treesx
+                - min_nx_tune
+                - fix_min_nx
+                - min_min_nx
+                - max_min_nx
+                - tree_depth_tune
+                - fix_tree_depth
+                - min_tree_depth
+                - max_tree_depth
+                - learn_ratex_tune
+                - fix_learn_ratex
+                - min_learn_ratex
+                - max_learn_ratex
+                - loss_reduction_tune
+                - fix_loss_reduction
+                - min_loss_reduction
+                - max_loss_reduction
+                - kernels
+                - cost_tune
+                - fix_cost
+                - min_cost
+                - max_cost
+                - margin_tune
+                - fix_margin
+                - min_margin
+                - max_margin
+                - rbf_sigma_tune
+                - fix_rbf_sigma
+                - min_rbf_sigma
+                - max_rbf_sigma
+                - degree_tune
+                - fix_degree
+                - min_degree
+                - max_degree
+                - scale_factor_tune
+                - fix_scale_factor
+                - min_scale_factor
+                - max_scale_factor
+
+    - name: h2_pair_raw_plot
+      title: "Pairwise Interaction Plot (Unnormalized)"
+      type: Image
+      description: Friedman H-stat Pairwise Interaction barplot (normalized)
+      width: 900
+      height: 600
+      renderFun: .plot_h2_pair_raw
+      visible: (h2_pair_raw)
+      clearWith:  # <-- here
+                - seed
+                - dep
+                - covs
+                - factors
+                - stdCovs
+                - encCat
+                - mode
+                - metrics
+                - tuners
+                - hidden_neurons_tune
+                - fix_n_neurons
+                - min_n_neurons
+                - max_n_neurons
+                - penalty_tune
+                - fix_penalty
+                - min_penalty
+                - max_penalty
+                - mtry_tune
+                - fix_mtry
+                - min_mtry
+                - max_mtry
+                - trees_tune
+                - fix_trees
+                - min_trees
+                - max_trees
+                - min_n_tune
+                - fix_min_n
+                - min_min_n
+                - max_min_n
+                - mtryx_tune
+                - fix_mtryx
+                - min_mtryx
+                - max_mtryx
+                - treesx_tune
+                - fix_treesx
+                - min_treesx
+                - max_treesx
+                - min_nx_tune
+                - fix_min_nx
+                - min_min_nx
+                - max_min_nx
+                - tree_depth_tune
+                - fix_tree_depth
+                - min_tree_depth
+                - max_tree_depth
+                - learn_ratex_tune
+                - fix_learn_ratex
+                - min_learn_ratex
+                - max_learn_ratex
+                - loss_reduction_tune
+                - fix_loss_reduction
+                - min_loss_reduction
+                - max_loss_reduction
+                - kernels
+                - cost_tune
+                - fix_cost
+                - min_cost
+                - max_cost
+                - margin_tune
+                - fix_margin
+                - min_margin
+                - max_margin
+                - rbf_sigma_tune
+                - fix_rbf_sigma
+                - min_rbf_sigma
+                - max_rbf_sigma
+                - degree_tune
+                - fix_degree
+                - min_degree
+                - max_degree
+                - scale_factor_tune
+                - fix_scale_factor
+                - min_scale_factor
+                - max_scale_factor
+
+    - name: friedman_hstat
+      title: Friedman H-statistic
+      type: Table
+      visible: (h2_total)
+      columns:
+        - name: Feature
+          title: Feature
+          type: text
+      clearWith:  # <-- here
+                - seed
+                - dep
+                - covs
+                - factors
+                - stdCovs
+                - encCat
+                - mode
+                - metrics
+                - tuners
+                - hidden_neurons_tune
+                - fix_n_neurons
+                - min_n_neurons
+                - max_n_neurons
+                - penalty_tune
+                - fix_penalty
+                - min_penalty
+                - max_penalty
+                - mtry_tune
+                - fix_mtry
+                - min_mtry
+                - max_mtry
+                - trees_tune
+                - fix_trees
+                - min_trees
+                - max_trees
+                - min_n_tune
+                - fix_min_n
+                - min_min_n
+                - max_min_n
+                - mtryx_tune
+                - fix_mtryx
+                - min_mtryx
+                - max_mtryx
+                - treesx_tune
+                - fix_treesx
+                - min_treesx
+                - max_treesx
+                - min_nx_tune
+                - fix_min_nx
+                - min_min_nx
+                - max_min_nx
+                - tree_depth_tune
+                - fix_tree_depth
+                - min_tree_depth
+                - max_tree_depth
+                - learn_ratex_tune
+                - fix_learn_ratex
+                - min_learn_ratex
+                - max_learn_ratex
+                - loss_reduction_tune
+                - fix_loss_reduction
+                - min_loss_reduction
+                - max_loss_reduction
+                - kernels
+                - cost_tune
+                - fix_cost
+                - min_cost
+                - max_cost
+                - margin_tune
+                - fix_margin
+                - min_margin
+                - max_margin
+                - rbf_sigma_tune
+                - fix_rbf_sigma
+                - min_rbf_sigma
+                - max_rbf_sigma
+                - degree_tune
+                - fix_degree
+                - min_degree
+                - max_degree
+                - scale_factor_tune
+                - fix_scale_factor
+                - min_scale_factor
+                - max_scale_factor
+
+    - name: pairwise_hstat_norm
+      title: Pairwise H-statistic Normalized
+      type: Table
+      visible: (h2_pair_norm)
+      columns:
+        - name: "Pairwise Interaction"
+          title: Pairwise Interaction
+          type: text
+      clearWith:  # <-- here
+                - seed
+                - dep
+                - covs
+                - factors
+                - stdCovs
+                - encCat
+                - mode
+                - metrics
+                - tuners
+                - hidden_neurons_tune
+                - fix_n_neurons
+                - min_n_neurons
+                - max_n_neurons
+                - penalty_tune
+                - fix_penalty
+                - min_penalty
+                - max_penalty
+                - mtry_tune
+                - fix_mtry
+                - min_mtry
+                - max_mtry
+                - trees_tune
+                - fix_trees
+                - min_trees
+                - max_trees
+                - min_n_tune
+                - fix_min_n
+                - min_min_n
+                - max_min_n
+                - mtryx_tune
+                - fix_mtryx
+                - min_mtryx
+                - max_mtryx
+                - treesx_tune
+                - fix_treesx
+                - min_treesx
+                - max_treesx
+                - min_nx_tune
+                - fix_min_nx
+                - min_min_nx
+                - max_min_nx
+                - tree_depth_tune
+                - fix_tree_depth
+                - min_tree_depth
+                - max_tree_depth
+                - learn_ratex_tune
+                - fix_learn_ratex
+                - min_learn_ratex
+                - max_learn_ratex
+                - loss_reduction_tune
+                - fix_loss_reduction
+                - min_loss_reduction
+                - max_loss_reduction
+                - kernels
+                - cost_tune
+                - fix_cost
+                - min_cost
+                - max_cost
+                - margin_tune
+                - fix_margin
+                - min_margin
+                - max_margin
+                - rbf_sigma_tune
+                - fix_rbf_sigma
+                - min_rbf_sigma
+                - max_rbf_sigma
+                - degree_tune
+                - fix_degree
+                - min_degree
+                - max_degree
+                - scale_factor_tune
+                - fix_scale_factor
+                - min_scale_factor
+                - max_scale_factor
+
+    - name: pairwise_hstat_raw
+      title: Pairwise H-statistic Raw
+      type: Table
+      visible: (h2_pair_raw)
+      columns:
+        - name: "Pairwise Interaction"
+          title: Pairwise Interaction
+          type: text
+      clearWith:  # <-- here
+                - seed
+                - dep
+                - covs
+                - factors
+                - stdCovs
+                - encCat
+                - mode
+                - metrics
+                - tuners
+                - hidden_neurons_tune
+                - fix_n_neurons
+                - min_n_neurons
+                - max_n_neurons
+                - penalty_tune
+                - fix_penalty
+                - min_penalty
+                - max_penalty
+                - mtry_tune
+                - fix_mtry
+                - min_mtry
+                - max_mtry
+                - trees_tune
+                - fix_trees
+                - min_trees
+                - max_trees
+                - min_n_tune
+                - fix_min_n
+                - min_min_n
+                - max_min_n
+                - mtryx_tune
+                - fix_mtryx
+                - min_mtryx
+                - max_mtryx
+                - treesx_tune
+                - fix_treesx
+                - min_treesx
+                - max_treesx
+                - min_nx_tune
+                - fix_min_nx
+                - min_min_nx
+                - max_min_nx
+                - tree_depth_tune
+                - fix_tree_depth
+                - min_tree_depth
+                - max_tree_depth
+                - learn_ratex_tune
+                - fix_learn_ratex
+                - min_learn_ratex
+                - max_learn_ratex
+                - loss_reduction_tune
+                - fix_loss_reduction
+                - min_loss_reduction
+                - max_loss_reduction
+                - kernels
+                - cost_tune
+                - fix_cost
+                - min_cost
+                - max_cost
+                - margin_tune
+                - fix_margin
+                - min_margin
+                - max_margin
+                - rbf_sigma_tune
+                - fix_rbf_sigma
+                - min_rbf_sigma
+                - max_rbf_sigma
+                - degree_tune
+                - fix_degree
+                - min_degree
+                - max_degree
+                - scale_factor_tune
+                - fix_scale_factor
+                - min_scale_factor
+                - max_scale_factor
+
+    - name: pdp_plots
+      title: Partial Dependence Plots
+      type: Array
+      description: an array of plots
+      template:
+          title: $key
+          type: Image
+          description: descriptives plot
+          width: 900
+          height: 600
+          renderFun: .plot_pdp
+          clearWith:  # <-- here
+                - seed
+                - dep
+                - covs
+                - factors
+                - stdCovs
+                - encCat
+                - mode
+                - metrics
+                - tuners
+                - hidden_neurons_tune
+                - fix_n_neurons
+                - min_n_neurons
+                - max_n_neurons
+                - penalty_tune
+                - fix_penalty
+                - min_penalty
+                - max_penalty
+                - mtry_tune
+                - fix_mtry
+                - min_mtry
+                - max_mtry
+                - trees_tune
+                - fix_trees
+                - min_trees
+                - max_trees
+                - min_n_tune
+                - fix_min_n
+                - min_min_n
+                - max_min_n
+                - mtryx_tune
+                - fix_mtryx
+                - min_mtryx
+                - max_mtryx
+                - treesx_tune
+                - fix_treesx
+                - min_treesx
+                - max_treesx
+                - min_nx_tune
+                - fix_min_nx
+                - min_min_nx
+                - max_min_nx
+                - tree_depth_tune
+                - fix_tree_depth
+                - min_tree_depth
+                - max_tree_depth
+                - learn_ratex_tune
+                - fix_learn_ratex
+                - min_learn_ratex
+                - max_learn_ratex
+                - loss_reduction_tune
+                - fix_loss_reduction
+                - min_loss_reduction
+                - max_loss_reduction
+                - kernels
+                - cost_tune
+                - fix_cost
+                - min_cost
+                - max_cost
+                - margin_tune
+                - fix_margin
+                - min_margin
+                - max_margin
+                - rbf_sigma_tune
+                - fix_rbf_sigma
+                - min_rbf_sigma
+                - max_rbf_sigma
+                - degree_tune
+                - fix_degree
+                - min_degree
+                - max_degree
+                - scale_factor_tune
+                - fix_scale_factor
+                - min_scale_factor
+                - max_scale_factor
+
+    - name: ale_plots
+      title: Accumulated Local Effect Plots
+      type: Array
+      description: an array of plots
+      template:
+          title: $key
+          type: Image
+          description: descriptives plot
+          width: 900
+          height: 600
+          renderFun: .plot_ale
+          clearWith:  # <-- here
+                - seed
+                - dep
+                - covs
+                - factors
+                - stdCovs
+                - encCat
+                - mode
+                - metrics
+                - tuners
+                - hidden_neurons_tune
+                - fix_n_neurons
+                - min_n_neurons
+                - max_n_neurons
+                - penalty_tune
+                - fix_penalty
+                - min_penalty
+                - max_penalty
+                - mtry_tune
+                - fix_mtry
+                - min_mtry
+                - max_mtry
+                - trees_tune
+                - fix_trees
+                - min_trees
+                - max_trees
+                - min_n_tune
+                - fix_min_n
+                - min_min_n
+                - max_min_n
+                - mtryx_tune
+                - fix_mtryx
+                - min_mtryx
+                - max_mtryx
+                - treesx_tune
+                - fix_treesx
+                - min_treesx
+                - max_treesx
+                - min_nx_tune
+                - fix_min_nx
+                - min_min_nx
+                - max_min_nx
+                - tree_depth_tune
+                - fix_tree_depth
+                - min_tree_depth
+                - max_tree_depth
+                - learn_ratex_tune
+                - fix_learn_ratex
+                - min_learn_ratex
+                - max_learn_ratex
+                - loss_reduction_tune
+                - fix_loss_reduction
+                - min_loss_reduction
+                - max_loss_reduction
+                - kernels
+                - cost_tune
+                - fix_cost
+                - min_cost
+                - max_cost
+                - margin_tune
+                - fix_margin
+                - min_margin
+                - max_margin
+                - rbf_sigma_tune
+                - fix_rbf_sigma
+                - min_rbf_sigma
+                - max_rbf_sigma
+                - degree_tune
+                - fix_degree
+                - min_degree
+                - max_degree
+                - scale_factor_tune
+                - fix_scale_factor
+                - min_scale_factor
+                - max_scale_factor
 
     - name: pred_class
       title: Predicted Class

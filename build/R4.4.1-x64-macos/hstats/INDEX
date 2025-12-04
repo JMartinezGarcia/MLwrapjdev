@@ -1,0 +1,29 @@
+[.hstats_matrix         Subsets "hstats_matrix" Object
+average_loss            Average Loss
+dim.hstats_matrix       Dimensions of "hstats_matrix" Object
+dimnames.hstats_matrix
+                        Dimnames of "hstats_matrix" Object
+dimnames<-.hstats_matrix
+                        Dimnames (Replacement Method) of
+                        "hstats_matrix"
+h2                      Total Interaction Strength
+h2_overall              Overall Interaction Strength
+h2_pairwise             Pairwise Interaction Strength
+h2_threeway             Three-way Interaction Strength
+hstats                  Calculate Interaction Statistics
+ice                     Individual Conditional Expectations
+multivariate_grid       Multivariate Grid
+partial_dep             Partial Dependence Plot
+pd_importance           PD Bases Importance (Experimental)
+perm_importance         Permutation Importance
+plot.hstats             Plot Method for "hstats" Object
+plot.hstats_matrix      Plots "hstats_matrix" Object
+plot.ice                Plots "ice" Object
+plot.partial_dep        Plots "partial_dep" Object
+print.hstats            Print Method
+print.hstats_matrix     Prints "hstats_matrix" Object
+print.hstats_summary    Print Method
+print.ice               Prints "ice" Object
+print.partial_dep       Prints "partial_dep" Object
+summary.hstats          Summary Method
+univariate_grid         Univariate Grid
