@@ -690,6 +690,27 @@ children:
                   - type: CheckBox
                     name: sobol
                     enable: (show_sobol)
+              - type: LayoutBox
+                margin: large
+                children:
+                  - type: Label
+                    label: <b> Friedman's H-statistic </b>
+                  - type: LayoutBox
+                    style: inline
+                    margin: large
+                    children:
+                      - type: CheckBox
+                        name: h2_total
+                      - type: CheckBox
+                        name: h2_pair_norm
+                      - type: CheckBox
+                        name: h2_pair_raw
+              - type: LayoutBox
+                style: list
+                margin: large
+                children:
+                  - type: ComboBox
+                    name: new_data_SA
       - type: CollapseBox
         collapsed: true
         label: Feature Interaction and Functional Dependence
@@ -697,20 +718,11 @@ children:
         stretchFactor: 1
         children:
           - type: LayoutBox
-            margin: large
-            children:
-              - type: Label
-                label: <b> Friedman's H-statistic </b>
-              - type: LayoutBox
-                style: inline
+                style: list
                 margin: large
                 children:
-                  - type: CheckBox
-                    name: h2_total
-                  - type: CheckBox
-                    name: h2_pair_norm
-                  - type: CheckBox
-                    name: h2_pair_raw
+                  - type: ComboBox
+                    name: new_data_FI
           - type: ModeSelector
             name: mode2
             stretchFactor: 1

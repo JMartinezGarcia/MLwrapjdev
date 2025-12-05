@@ -319,9 +319,21 @@ RegressionClass <- R6::R6Class(
 
             private$.checkpoint()
 
+            if (self$options$new_data_SA == "test"){
+
+                use_test = TRUE
+
+            } else {
+
+                use_test = FALSE
+
+            }
+
             sensitivity_methods <- private$.getSensitivityMethods(model_name)
 
-            analysis_object <- MLwrap::sensitivity_analysis(analysis_object, methods = sensitivity_methods)
+            analysis_object <- MLwrap::sensitivity_analysis(analysis_object,
+                                                            methods = sensitivity_methods,
+                                                            use_test = use_test)
 
             # Calculate Olden for Neural Networks
 
@@ -1334,9 +1346,21 @@ RegressionClass <- R6::R6Class(
             feature <- state[[1]]
             group_by <- state[[2]]
 
+            if (self$options$new_data_FI == "test"){
+
+                use_test = TRUE
+
+            } else {
+
+                use_test = FALSE
+
+            }
+
+
             p <- MLwrap::plot_pdp(self$results$model, feature = feature,
                                                       group_by = group_by,
                                                       show_ice = self$options$show_ice,
+                                                      use_test = use_test,
                                                       plot = F)
             print(p)
 
@@ -1350,8 +1374,20 @@ RegressionClass <- R6::R6Class(
             feature <- state[[1]]
             group_by <- state[[2]]
 
+            if (self$options$new_data_FI == "test"){
+
+                use_test = TRUE
+
+            } else {
+
+                use_test = FALSE
+
+            }
+
+
             p <- MLwrap::plot_ale(self$results$model, feature = feature,
                                                       group = group_by,
+                                                      use_test = use_test,
                                                       plot = F)
             print(p)
 
