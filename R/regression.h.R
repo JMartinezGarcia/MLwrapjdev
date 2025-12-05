@@ -103,13 +103,15 @@ RegressionOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             show_shap = TRUE,
             show_olden = TRUE,
             show_sobol = TRUE,
+            new_data_SA = "train",
             h2_total = FALSE,
             h2_pair_norm = FALSE,
             h2_pair_raw = FALSE,
             mode2 = "pdp_mode",
             show_ice = TRUE,
             pdp_terms = list(),
-            ale_terms = list(), ...) {
+            ale_terms = list(),
+            new_data_FI = "train", ...) {
 
             super$initialize(
                 package="MLwrapjdev",
@@ -652,6 +654,13 @@ RegressionOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 show_sobol,
                 hidden=TRUE,
                 default=TRUE)
+            private$..new_data_SA <- jmvcore::OptionList$new(
+                "new_data_SA",
+                new_data_SA,
+                options=list(
+                    "train",
+                    "test"),
+                default="train")
             private$..h2_total <- jmvcore::OptionBool$new(
                 "h2_total",
                 h2_total,
@@ -689,6 +698,13 @@ RegressionOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 template=jmvcore::OptionVariables$new(
                     "ale_terms",
                     NULL))
+            private$..new_data_FI <- jmvcore::OptionList$new(
+                "new_data_FI",
+                new_data_FI,
+                options=list(
+                    "train",
+                    "test"),
+                default="train")
             private$..residuals <- jmvcore::OptionOutput$new(
                 "residuals")
             private$..predictions <- jmvcore::OptionOutput$new(
@@ -793,6 +809,7 @@ RegressionOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..show_shap)
             self$.addOption(private$..show_olden)
             self$.addOption(private$..show_sobol)
+            self$.addOption(private$..new_data_SA)
             self$.addOption(private$..h2_total)
             self$.addOption(private$..h2_pair_norm)
             self$.addOption(private$..h2_pair_raw)
@@ -800,6 +817,7 @@ RegressionOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..show_ice)
             self$.addOption(private$..pdp_terms)
             self$.addOption(private$..ale_terms)
+            self$.addOption(private$..new_data_FI)
             self$.addOption(private$..residuals)
             self$.addOption(private$..predictions)
             self$.addOption(private$..dataset_id)
@@ -902,6 +920,7 @@ RegressionOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         show_shap = function() private$..show_shap$value,
         show_olden = function() private$..show_olden$value,
         show_sobol = function() private$..show_sobol$value,
+        new_data_SA = function() private$..new_data_SA$value,
         h2_total = function() private$..h2_total$value,
         h2_pair_norm = function() private$..h2_pair_norm$value,
         h2_pair_raw = function() private$..h2_pair_raw$value,
@@ -909,6 +928,7 @@ RegressionOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         show_ice = function() private$..show_ice$value,
         pdp_terms = function() private$..pdp_terms$value,
         ale_terms = function() private$..ale_terms$value,
+        new_data_FI = function() private$..new_data_FI$value,
         residuals = function() private$..residuals$value,
         predictions = function() private$..predictions$value,
         dataset_id = function() private$..dataset_id$value),
@@ -1010,6 +1030,7 @@ RegressionOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..show_shap = NA,
         ..show_olden = NA,
         ..show_sobol = NA,
+        ..new_data_SA = NA,
         ..h2_total = NA,
         ..h2_pair_norm = NA,
         ..h2_pair_raw = NA,
@@ -1017,6 +1038,7 @@ RegressionOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..show_ice = NA,
         ..pdp_terms = NA,
         ..ale_terms = NA,
+        ..new_data_FI = NA,
         ..residuals = NA,
         ..predictions = NA,
         ..dataset_id = NA)
@@ -2900,6 +2922,7 @@ RegressionBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param show_shap .
 #' @param show_olden .
 #' @param show_sobol .
+#' @param new_data_SA .
 #' @param h2_total .
 #' @param h2_pair_norm .
 #' @param h2_pair_raw .
@@ -2907,6 +2930,7 @@ RegressionBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param show_ice .
 #' @param pdp_terms .
 #' @param ale_terms .
+#' @param new_data_FI .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$text} \tab \tab \tab \tab \tab a preformatted \cr
@@ -3040,13 +3064,15 @@ Regression <- function(
     show_shap = TRUE,
     show_olden = TRUE,
     show_sobol = TRUE,
+    new_data_SA = "train",
     h2_total = FALSE,
     h2_pair_norm = FALSE,
     h2_pair_raw = FALSE,
     mode2 = "pdp_mode",
     show_ice = TRUE,
     pdp_terms = list(),
-    ale_terms = list()) {
+    ale_terms = list(),
+    new_data_FI = "train") {
 
     if ( ! requireNamespace("jmvcore", quietly=TRUE))
         stop("Regression requires jmvcore to be installed (restart may be required)")
@@ -3167,13 +3193,15 @@ Regression <- function(
         show_shap = show_shap,
         show_olden = show_olden,
         show_sobol = show_sobol,
+        new_data_SA = new_data_SA,
         h2_total = h2_total,
         h2_pair_norm = h2_pair_norm,
         h2_pair_raw = h2_pair_raw,
         mode2 = mode2,
         show_ice = show_ice,
         pdp_terms = pdp_terms,
-        ale_terms = ale_terms)
+        ale_terms = ale_terms,
+        new_data_FI = new_data_FI)
 
     analysis <- RegressionClass$new(
         options = options,

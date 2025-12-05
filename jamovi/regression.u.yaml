@@ -718,9 +718,9 @@ children:
         stretchFactor: 1
         children:
           - type: LayoutBox
-                style: list
-                margin: large
-                children:
+            style: list
+            margin: large
+            children:
                   - type: ComboBox
                     name: new_data_FI
           - type: ModeSelector
