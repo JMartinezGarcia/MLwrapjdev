@@ -881,7 +881,17 @@ options:
       type: Bool
       hidden: true
       default: true
-      
+
+    - name: new_data_SA
+      type: List
+      title: Select Dataset
+      options:
+        - name: train
+          title: "Train Data"
+        - name: test
+          title: "Test Data"
+      default: train
+
 ##############################################
 #        Feature Interaction                 #
 ##############################################
@@ -919,18 +929,26 @@ options:
     - name: pdp_terms
       title: Terms
       type: Array
-      default:
-            - []
+      default: []
       template:
             type: Variables
 
     - name: ale_terms
       title: Terms
       type: Array
-      default:
-            - []
+      default: []
       template:
             type: Variables
+
+    - name: new_data_FI
+      type: List
+      title: Select Dataset
+      options:
+        - name: train
+          title: "Train Data"
+        - name: test
+          title: "Test Data"
+      default: train
 
 ## Outputs
 

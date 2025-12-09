@@ -894,6 +894,16 @@ options:
       hidden: true
       default: true
 
+    - name: new_data_SA
+      type: List
+      title: Select Dataset
+      options:
+        - name: train
+          title: "Train Data"
+        - name: test
+          title: "Test Data"
+      default: train
+
 ##############################################
 #        Feature Interaction                 #
 ##############################################
@@ -943,6 +953,16 @@ options:
             - []
       template:
             type: Variables
+
+    - name: new_data_FI
+      type: List
+      title: Select Dataset
+      options:
+        - name: train
+          title: "Train Data"
+        - name: test
+          title: "Test Data"
+      default: train
 
 ## Outputs
 

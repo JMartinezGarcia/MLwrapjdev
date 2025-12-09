@@ -147,6 +147,7 @@ regression.events = {
             return;
         }
 
+
         ui.pdp_terms.clearError();
     },
 
@@ -180,7 +181,6 @@ regression.events = {
             ui.ale_terms.setError("Each ALE plot can have at most 2 variables (feature + optional groupby).");
             return;
         }
-
 
         ui.ale_terms.clearError();
     }

@@ -604,6 +604,7 @@ items:
                 - fix_scale_factor
                 - min_scale_factor
                 - max_scale_factor
+                - new_data_SA
 
     - name: plots_shap
       title: SHAP (Shapley Additive exPlanations) Plots
@@ -688,6 +689,7 @@ items:
                 - fix_scale_factor
                 - min_scale_factor
                 - max_scale_factor
+                - new_data_SA
 
     - name: plots_olden
       title: Olden's Method Sensitivity Plots
@@ -769,6 +771,7 @@ items:
                 - fix_scale_factor
                 - min_scale_factor
                 - max_scale_factor
+                - new_data_SA
 
     - name:  text_tables
       title: Sensitivity Analysis Tables
@@ -855,6 +858,7 @@ items:
                 - fix_scale_factor
                 - min_scale_factor
                 - max_scale_factor
+                - new_data_SA
           columns:
                     - name: var
                       title: "Feature"
@@ -939,6 +943,7 @@ items:
                 - fix_scale_factor
                 - min_scale_factor
                 - max_scale_factor
+                - new_data_SA
           columns:
                     - name: var
                       title: "Feature"
@@ -1023,6 +1028,7 @@ items:
                 - fix_scale_factor
                 - min_scale_factor
                 - max_scale_factor
+                - new_data_SA
           columns:
                     - name: class
                       title: "Class"
@@ -1116,6 +1122,7 @@ items:
                 - fix_scale_factor
                 - min_scale_factor
                 - max_scale_factor
+                - new_data_SA
 
     - name: h2_pair_norm_plot
       title: "Pairwise Interaction Plot (Normalized)"
@@ -1200,6 +1207,7 @@ items:
                 - fix_scale_factor
                 - min_scale_factor
                 - max_scale_factor
+                - new_data_SA
 
     - name: h2_pair_raw_plot
       title: "Pairwise Interaction Plot (Unnormalized)"
@@ -1284,6 +1292,7 @@ items:
                 - fix_scale_factor
                 - min_scale_factor
                 - max_scale_factor
+                - new_data_SA
 
     - name: friedman_hstat
       title: Friedman H-statistic
@@ -1368,6 +1377,7 @@ items:
                 - fix_scale_factor
                 - min_scale_factor
                 - max_scale_factor
+                - new_data_SA
 
     - name: pairwise_hstat_norm
       title: Pairwise H-statistic Normalized
@@ -1452,6 +1462,7 @@ items:
                 - fix_scale_factor
                 - min_scale_factor
                 - max_scale_factor
+                - new_data_SA
 
     - name: pairwise_hstat_raw
       title: Pairwise H-statistic Raw
@@ -1536,6 +1547,7 @@ items:
                 - fix_scale_factor
                 - min_scale_factor
                 - max_scale_factor
+                - new_data_SA
 
     - name: pdp_plots
       title: Partial Dependence Plots
@@ -1623,6 +1635,7 @@ items:
                 - fix_scale_factor
                 - min_scale_factor
                 - max_scale_factor
+                - new_data_FI
 
     - name: ale_plots
       title: Accumulated Local Effect Plots
@@ -1710,6 +1723,7 @@ items:
                 - fix_scale_factor
                 - min_scale_factor
                 - max_scale_factor
+                - new_data_FI
 
     - name: pred_class
       title: Predicted Class

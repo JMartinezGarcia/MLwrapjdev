@@ -109,15 +109,15 @@ MulticlassClassificationOptions <- if (requireNamespace("jmvcore", quietly=TRUE)
             olden = FALSE,
             show_shap = TRUE,
             show_olden = TRUE,
+            new_data_SA = "train",
             h2_total = FALSE,
             h2_pair_norm = FALSE,
             h2_pair_raw = FALSE,
             mode2 = "pdp_mode",
             show_ice = TRUE,
-            pdp_terms = list(
-                list()),
-            ale_terms = list(
-                list()), ...) {
+            pdp_terms = list(),
+            ale_terms = list(),
+            new_data_FI = "train", ...) {
 
             super$initialize(
                 package="MLwrapjdev",
@@ -683,6 +683,13 @@ MulticlassClassificationOptions <- if (requireNamespace("jmvcore", quietly=TRUE)
                 show_olden,
                 hidden=TRUE,
                 default=TRUE)
+            private$..new_data_SA <- jmvcore::OptionList$new(
+                "new_data_SA",
+                new_data_SA,
+                options=list(
+                    "train",
+                    "test"),
+                default="train")
             private$..h2_total <- jmvcore::OptionBool$new(
                 "h2_total",
                 h2_total,
@@ -709,19 +716,24 @@ MulticlassClassificationOptions <- if (requireNamespace("jmvcore", quietly=TRUE)
             private$..pdp_terms <- jmvcore::OptionArray$new(
                 "pdp_terms",
                 pdp_terms,
-                default=list(
-                    list()),
+                default=list(),
                 template=jmvcore::OptionVariables$new(
                     "pdp_terms",
                     NULL))
             private$..ale_terms <- jmvcore::OptionArray$new(
                 "ale_terms",
                 ale_terms,
-                default=list(
-                    list()),
+                default=list(),
                 template=jmvcore::OptionVariables$new(
                     "ale_terms",
                     NULL))
+            private$..new_data_FI <- jmvcore::OptionList$new(
+                "new_data_FI",
+                new_data_FI,
+                options=list(
+                    "train",
+                    "test"),
+                default="train")
             private$..pred_class <- jmvcore::OptionOutput$new(
                 "pred_class")
             private$..pred_prob <- jmvcore::OptionOutput$new(
@@ -832,6 +844,7 @@ MulticlassClassificationOptions <- if (requireNamespace("jmvcore", quietly=TRUE)
             self$.addOption(private$..olden)
             self$.addOption(private$..show_shap)
             self$.addOption(private$..show_olden)
+            self$.addOption(private$..new_data_SA)
             self$.addOption(private$..h2_total)
             self$.addOption(private$..h2_pair_norm)
             self$.addOption(private$..h2_pair_raw)
@@ -839,6 +852,7 @@ MulticlassClassificationOptions <- if (requireNamespace("jmvcore", quietly=TRUE)
             self$.addOption(private$..show_ice)
             self$.addOption(private$..pdp_terms)
             self$.addOption(private$..ale_terms)
+            self$.addOption(private$..new_data_FI)
             self$.addOption(private$..pred_class)
             self$.addOption(private$..pred_prob)
             self$.addOption(private$..dataset_id)
@@ -947,6 +961,7 @@ MulticlassClassificationOptions <- if (requireNamespace("jmvcore", quietly=TRUE)
         olden = function() private$..olden$value,
         show_shap = function() private$..show_shap$value,
         show_olden = function() private$..show_olden$value,
+        new_data_SA = function() private$..new_data_SA$value,
         h2_total = function() private$..h2_total$value,
         h2_pair_norm = function() private$..h2_pair_norm$value,
         h2_pair_raw = function() private$..h2_pair_raw$value,
@@ -954,6 +969,7 @@ MulticlassClassificationOptions <- if (requireNamespace("jmvcore", quietly=TRUE)
         show_ice = function() private$..show_ice$value,
         pdp_terms = function() private$..pdp_terms$value,
         ale_terms = function() private$..ale_terms$value,
+        new_data_FI = function() private$..new_data_FI$value,
         pred_class = function() private$..pred_class$value,
         pred_prob = function() private$..pred_prob$value,
         dataset_id = function() private$..dataset_id$value),
@@ -1061,6 +1077,7 @@ MulticlassClassificationOptions <- if (requireNamespace("jmvcore", quietly=TRUE)
         ..olden = NA,
         ..show_shap = NA,
         ..show_olden = NA,
+        ..new_data_SA = NA,
         ..h2_total = NA,
         ..h2_pair_norm = NA,
         ..h2_pair_raw = NA,
@@ -1068,6 +1085,7 @@ MulticlassClassificationOptions <- if (requireNamespace("jmvcore", quietly=TRUE)
         ..show_ice = NA,
         ..pdp_terms = NA,
         ..ale_terms = NA,
+        ..new_data_FI = NA,
         ..pred_class = NA,
         ..pred_prob = NA,
         ..dataset_id = NA)
@@ -1711,7 +1729,8 @@ MulticlassClassificationResults <- if (requireNamespace("jmvcore", quietly=TRUE)
                     "scale_factor_tune",
                     "fix_scale_factor",
                     "min_scale_factor",
-                    "max_scale_factor")))
+                    "max_scale_factor",
+                    "new_data_SA")))
             self$add(jmvcore::Array$new(
                 options=options,
                 name="plots_shap",
@@ -1793,7 +1812,8 @@ MulticlassClassificationResults <- if (requireNamespace("jmvcore", quietly=TRUE)
                         "scale_factor_tune",
                         "fix_scale_factor",
                         "min_scale_factor",
-                        "max_scale_factor"))))
+                        "max_scale_factor",
+                        "new_data_SA"))))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plots_olden",
@@ -1873,7 +1893,8 @@ MulticlassClassificationResults <- if (requireNamespace("jmvcore", quietly=TRUE)
                     "scale_factor_tune",
                     "fix_scale_factor",
                     "min_scale_factor",
-                    "max_scale_factor")))
+                    "max_scale_factor",
+                    "new_data_SA")))
             self$add(jmvcore::Preformatted$new(
                 options=options,
                 name="text_tables",
@@ -1957,7 +1978,8 @@ MulticlassClassificationResults <- if (requireNamespace("jmvcore", quietly=TRUE)
                         "scale_factor_tune",
                         "fix_scale_factor",
                         "min_scale_factor",
-                        "max_scale_factor"),
+                        "max_scale_factor",
+                        "new_data_SA"),
                     columns=list(
                         list(
                             `name`="var", 
@@ -2041,7 +2063,8 @@ MulticlassClassificationResults <- if (requireNamespace("jmvcore", quietly=TRUE)
                         "scale_factor_tune",
                         "fix_scale_factor",
                         "min_scale_factor",
-                        "max_scale_factor"),
+                        "max_scale_factor",
+                        "new_data_SA"),
                     columns=list(
                         list(
                             `name`="var", 
@@ -2125,7 +2148,8 @@ MulticlassClassificationResults <- if (requireNamespace("jmvcore", quietly=TRUE)
                         "scale_factor_tune",
                         "fix_scale_factor",
                         "min_scale_factor",
-                        "max_scale_factor"),
+                        "max_scale_factor",
+                        "new_data_SA"),
                     columns=list(
                         list(
                             `name`="class", 
@@ -2218,7 +2242,8 @@ MulticlassClassificationResults <- if (requireNamespace("jmvcore", quietly=TRUE)
                     "scale_factor_tune",
                     "fix_scale_factor",
                     "min_scale_factor",
-                    "max_scale_factor")))
+                    "max_scale_factor",
+                    "new_data_SA")))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="h2_pair_norm_plot",
@@ -2301,7 +2326,8 @@ MulticlassClassificationResults <- if (requireNamespace("jmvcore", quietly=TRUE)
                     "scale_factor_tune",
                     "fix_scale_factor",
                     "min_scale_factor",
-                    "max_scale_factor")))
+                    "max_scale_factor",
+                    "new_data_SA")))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="h2_pair_raw_plot",
@@ -2384,7 +2410,8 @@ MulticlassClassificationResults <- if (requireNamespace("jmvcore", quietly=TRUE)
                     "scale_factor_tune",
                     "fix_scale_factor",
                     "min_scale_factor",
-                    "max_scale_factor")))
+                    "max_scale_factor",
+                    "new_data_SA")))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="friedman_hstat",
@@ -2469,7 +2496,8 @@ MulticlassClassificationResults <- if (requireNamespace("jmvcore", quietly=TRUE)
                     "scale_factor_tune",
                     "fix_scale_factor",
                     "min_scale_factor",
-                    "max_scale_factor")))
+                    "max_scale_factor",
+                    "new_data_SA")))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="pairwise_hstat_norm",
@@ -2554,7 +2582,8 @@ MulticlassClassificationResults <- if (requireNamespace("jmvcore", quietly=TRUE)
                     "scale_factor_tune",
                     "fix_scale_factor",
                     "min_scale_factor",
-                    "max_scale_factor")))
+                    "max_scale_factor",
+                    "new_data_SA")))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="pairwise_hstat_raw",
@@ -2639,7 +2668,8 @@ MulticlassClassificationResults <- if (requireNamespace("jmvcore", quietly=TRUE)
                     "scale_factor_tune",
                     "fix_scale_factor",
                     "min_scale_factor",
-                    "max_scale_factor")))
+                    "max_scale_factor",
+                    "new_data_SA")))
             self$add(jmvcore::Array$new(
                 options=options,
                 name="pdp_plots",
@@ -2724,7 +2754,8 @@ MulticlassClassificationResults <- if (requireNamespace("jmvcore", quietly=TRUE)
                         "scale_factor_tune",
                         "fix_scale_factor",
                         "min_scale_factor",
-                        "max_scale_factor"))))
+                        "max_scale_factor",
+                        "new_data_FI"))))
             self$add(jmvcore::Array$new(
                 options=options,
                 name="ale_plots",
@@ -2809,7 +2840,8 @@ MulticlassClassificationResults <- if (requireNamespace("jmvcore", quietly=TRUE)
                         "scale_factor_tune",
                         "fix_scale_factor",
                         "min_scale_factor",
-                        "max_scale_factor"))))
+                        "max_scale_factor",
+                        "new_data_FI"))))
             self$add(jmvcore::Output$new(
                 options=options,
                 name="pred_class",
@@ -3199,6 +3231,7 @@ MulticlassClassificationBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R
 #' @param olden .
 #' @param show_shap .
 #' @param show_olden .
+#' @param new_data_SA .
 #' @param h2_total .
 #' @param h2_pair_norm .
 #' @param h2_pair_raw .
@@ -3206,6 +3239,7 @@ MulticlassClassificationBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R
 #' @param show_ice .
 #' @param pdp_terms .
 #' @param ale_terms .
+#' @param new_data_FI .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$text} \tab \tab \tab \tab \tab a preformatted \cr
@@ -3350,15 +3384,15 @@ MulticlassClassification <- function(
     olden = FALSE,
     show_shap = TRUE,
     show_olden = TRUE,
+    new_data_SA = "train",
     h2_total = FALSE,
     h2_pair_norm = FALSE,
     h2_pair_raw = FALSE,
     mode2 = "pdp_mode",
     show_ice = TRUE,
-    pdp_terms = list(
-                list()),
-    ale_terms = list(
-                list())) {
+    pdp_terms = list(),
+    ale_terms = list(),
+    new_data_FI = "train") {
 
     if ( ! requireNamespace("jmvcore", quietly=TRUE))
         stop("MulticlassClassification requires jmvcore to be installed (restart may be required)")
@@ -3486,13 +3520,15 @@ MulticlassClassification <- function(
         olden = olden,
         show_shap = show_shap,
         show_olden = show_olden,
+        new_data_SA = new_data_SA,
         h2_total = h2_total,
         h2_pair_norm = h2_pair_norm,
         h2_pair_raw = h2_pair_raw,
         mode2 = mode2,
         show_ice = show_ice,
         pdp_terms = pdp_terms,
-        ale_terms = ale_terms)
+        ale_terms = ale_terms,
+        new_data_FI = new_data_FI)
 
     analysis <- MulticlassClassificationClass$new(
         options = options,

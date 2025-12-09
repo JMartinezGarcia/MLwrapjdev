@@ -650,55 +650,76 @@ children:
     style: list
     stretchFactor: 1
     children:
-      - type: LayoutBox
-        margin: large
-        children:
-          - type: Label
-            label: <b> Permutation Feature Importance </b>
           - type: LayoutBox
             style: list
             margin: large
             children:
-              - type: CheckBox
-                name: pfi
-          - type: Label
-            label: <b> SHAP Values </b>
-          - type: LayoutBox
-            style: inline
-            margin: large
-            children:
-              - type: CheckBox
-                name: shap_mean
-                enable: (show_shap)
-              - type: CheckBox
-                name: shap_dir
-                enable: (show_shap)
-              - type: CheckBox
-                name: shap_box
-                enable: (show_shap)
-              - type: CheckBox
-                name: shap_swarm
-                enable: (show_shap)
-          - type: Label
-            label: <b> Olden's Method &nbsp; &nbsp; &nbsp;</b>
+              - type: Label
+                label: <b> Select Dataset </b>            
+              - type: RadioButton
+                name: data_label_SA
+                optionName: new_data_SA
+                optionPart: train
+              - name: new_data_SA_test
+                type: RadioButton
+                optionName: new_data_SA
+                optionPart: test
           - type: LayoutBox
             style: list
             margin: large
             children:
-              - type: CheckBox
-                name: olden
-                enable: (show_olden)
-  - type: CollapseBox
-    collapsed: true
-    label: Feature Interaction and Functional Dependence
-    style: list
-    stretchFactor: 1
-    children:
+              - type: Label
+                label: <b> Feature Importance </b>
           - type: LayoutBox
             margin: large
             children:
               - type: Label
-                label: <b> Friedman's H-statistic </b>
+                label: Permutation Feature Importance
+              - type: LayoutBox
+                style: list
+                margin: large
+                children:
+                  - type: CheckBox
+                    name: pfi
+              - type: Label
+                label: SHAP Values
+              - type: LayoutBox
+                style: inline
+                margin: large
+                children:
+                  - type: CheckBox
+                    name: shap_mean
+                    enable: (show_shap)
+                  - type: CheckBox
+                    name: shap_dir
+                    enable: (show_shap)
+                  - type: CheckBox
+                    name: shap_box
+                    enable: (show_shap)
+                  - type: CheckBox
+                    name: shap_swarm
+                    enable: (show_shap)
+              - type: Label
+                label: Olden's Method &nbsp; &nbsp; &nbsp;
+              - type: LayoutBox
+                style: list
+                margin: large
+                children:
+                  - type: CheckBox
+                    name: olden
+                    enable: (show_olden)
+          - type: LayoutBox
+            style: list
+            margin: large
+            children:
+              - type: Label
+                label: <b> Feature Interaction </b>
+          - type: LayoutBox
+            style: list
+            margin: large
+            children:
+              - type: Label
+                label: Friedman's H-statistic
               - type: LayoutBox
                 style: inline
                 margin: large
@@ -709,6 +730,26 @@ children:
                     name: h2_pair_norm
                   - type: CheckBox
                     name: h2_pair_raw
+  - type: CollapseBox
+    collapsed: true
+    label: Functional Dependence Plots
+    style: list
+    stretchFactor: 1
+    children:
+          - type: LayoutBox
+            style: list
+            margin: large
+            children:
+              - type: Label
+                label: <b> Select Dataset </b>            
+              - type: RadioButton
+                name: data_label_FI
+                optionName: new_data_FI
+                optionPart: train
+              - name: new_data_FI_test
+                type: RadioButton
+                optionName: new_data_FI
+                optionPart: test
           - type: ModeSelector
             name: mode2
             stretchFactor: 1

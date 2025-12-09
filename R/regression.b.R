@@ -219,11 +219,35 @@ RegressionClass <- R6::R6Class(
 
             private$.finalData()
 
+            if (self$options$new_data_SA == "test"){
+
+                use_test = TRUE
+
+            } else {
+
+                use_test = FALSE
+
+            }
+
             if (private$.compare_hash()){
 
                     model_path <- file.path(tempdir(), "analysis_object.rds")
 
                     analysis_object <- readRDS(model_path)
+
+                    prev_use_test <- readRDS(file.path(tempdir(), "use_test.rds"))
+
+                    if (use_test != prev_use_test){
+
+                        sensitivity_methods <- private$.getSensitivityMethods(analysis_object$model_name)
+
+                        analysis_object <- MLwrap::sensitivity_analysis(analysis_object,
+                                                                        methods = sensitivity_methods,
+                                                                        use_test = use_test)
+
+                        saveRDS(analysis_object, model_path)
+
+                    }
 
                     self$results$.setModel(analysis_object)
 
@@ -236,6 +260,8 @@ RegressionClass <- R6::R6Class(
                 }
 
                 private$.feature_names <- self$results$model$feature_names
+
+                saveRDS(use_test, file.path(tempdir(), "use_test.rds"))
 
 
 
@@ -1396,35 +1422,38 @@ RegressionClass <- R6::R6Class(
 
         # Utilities
 
+        .clean_jamovi_term_list =  function(x) {
+            if (is.null(x) || identical(x, NA)) return(NULL)
+
+            x <- lapply(x, function(v) {
+                if (is.null(v)) return(character(0))
+                if (is.list(v)) v <- unlist(v, use.names = FALSE)
+                v[!is.na(v) & v != ""]
+            })
+
+            x[lengths(x) > 0]
+        },
+
         .validate_ale_terms = function() {
 
-            ale_terms <- self$options$ale_terms
+            ale_terms <- private$.clean_jamovi_term_list(self$options$ale_terms)
             factors   <- self$options$factors
 
-            # skip if empty, NULL, or NA
-            if (is.null(ale_terms) || identical(ale_terms, NA))
+            # Skip si está vacío tras limpieza
+            if (is.null(ale_terms) || length(ale_terms) == 0)
                 return()
 
-            # Convert to data.frame if jamovi gives list(list())
-            if (!is.data.frame(ale_terms)) {
-                ale_terms <- as.data.frame(ale_terms, stringsAsFactors = FALSE)
-            }
+            # Convertir a data.frame AHORA, ya seguro
+            ale_terms <- as.data.frame(ale_terms, stringsAsFactors = FALSE)
 
-            if (ncol(ale_terms) == 0)
-                return()
-
-            # For each BLOCK (each column)
+            # Para cada bloque (columna)
             for (block_i in seq_len(ncol(ale_terms))) {
 
                 block <- ale_terms[[block_i]]
 
-                # Clean empty values
-                block <- block[!is.na(block) & block != ""]
-
                 if (length(block) == 0)
                     next
 
-                # FIRST variable in the block
                 first_var <- block[1]
 
                 if (first_var %in% factors) {
@@ -1438,33 +1467,22 @@ RegressionClass <- R6::R6Class(
 
         .validate_pdp_terms = function(){
 
-            pdp_terms <- self$options$pdp_terms
+            pdp_terms <- private$.clean_jamovi_term_list(self$options$pdp_terms)
             factors   <- self$options$factors
 
-            # skip if empty, NULL, or NA
-            if (is.null(pdp_terms) || identical(pdp_terms, NA))
+            # Si después de limpiar queda vacío → salir
+            if (is.null(pdp_terms) || length(pdp_terms) == 0)
                 return()
 
-            # Convert to data.frame if jamovi gives list(list())
-            if (!is.data.frame(pdp_terms)) {
-                pdp_terms <- as.data.frame(pdp_terms, stringsAsFactors = FALSE)
-            }
+            pdp_terms <- as.data.frame(pdp_terms, stringsAsFactors = FALSE)
 
-            if (ncol(pdp_terms) == 0)
-                return()
-
-            # For each BLOCK (each column)
             for (block_i in seq_len(ncol(pdp_terms))) {
 
                 block <- pdp_terms[[block_i]]
 
-                # Clean empty values
-                block <- block[!is.na(block) & block != ""]
-
                 if (length(block) == 0)
                     next
 
-                # FIRST variable in the block
                 first_var <- block[1]
 
                 if (first_var %in% factors) {

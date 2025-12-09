@@ -1519,11 +1519,12 @@ RegressionResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                         "scale_factor_tune",
                         "fix_scale_factor",
                         "min_scale_factor",
-                        "max_scale_factor"))))
+                        "max_scale_factor",
+                        "new_data_SA"))))
             self$add(jmvcore::Preformatted$new(
                 options=options,
                 name="text_sensitivity",
-                title="Sensitivty Analysis Tables",
+                title="Sensitivity Analysis Tables",
                 visible="(pfi || shap_mean || shap_dir || shap_box || shap_swarm || olden || sobol)"))
             self$add(jmvcore::Table$new(
                 options=options,
@@ -1617,7 +1618,8 @@ RegressionResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "scale_factor_tune",
                     "fix_scale_factor",
                     "min_scale_factor",
-                    "max_scale_factor")))
+                    "max_scale_factor",
+                    "new_data_SA")))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="table_shap",
@@ -1714,7 +1716,8 @@ RegressionResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "scale_factor_tune",
                     "fix_scale_factor",
                     "min_scale_factor",
-                    "max_scale_factor")))
+                    "max_scale_factor",
+                    "new_data_SA")))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="table_olden",
@@ -1803,7 +1806,8 @@ RegressionResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "scale_factor_tune",
                     "fix_scale_factor",
                     "min_scale_factor",
-                    "max_scale_factor")))
+                    "max_scale_factor",
+                    "new_data_SA")))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="table_sobol",
@@ -1920,7 +1924,8 @@ RegressionResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "scale_factor_tune",
                     "fix_scale_factor",
                     "min_scale_factor",
-                    "max_scale_factor")))
+                    "max_scale_factor",
+                    "new_data_SA")))
             self$add(jmvcore::Preformatted$new(
                 options=options,
                 name="text_h2",
@@ -2008,7 +2013,8 @@ RegressionResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "scale_factor_tune",
                     "fix_scale_factor",
                     "min_scale_factor",
-                    "max_scale_factor")))
+                    "max_scale_factor",
+                    "new_data_SA")))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="h2_pair_norm_plot",
@@ -2091,7 +2097,8 @@ RegressionResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "scale_factor_tune",
                     "fix_scale_factor",
                     "min_scale_factor",
-                    "max_scale_factor")))
+                    "max_scale_factor",
+                    "new_data_SA")))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="h2_pair_raw_plot",
@@ -2174,7 +2181,8 @@ RegressionResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "scale_factor_tune",
                     "fix_scale_factor",
                     "min_scale_factor",
-                    "max_scale_factor")))
+                    "max_scale_factor",
+                    "new_data_SA")))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="friedman_hstat",
@@ -2263,7 +2271,8 @@ RegressionResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "scale_factor_tune",
                     "fix_scale_factor",
                     "min_scale_factor",
-                    "max_scale_factor")))
+                    "max_scale_factor",
+                    "new_data_SA")))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="pairwise_hstat",
@@ -2356,7 +2365,8 @@ RegressionResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "scale_factor_tune",
                     "fix_scale_factor",
                     "min_scale_factor",
-                    "max_scale_factor")))
+                    "max_scale_factor",
+                    "new_data_SA")))
             self$add(jmvcore::Array$new(
                 options=options,
                 name="pdp_plots",
@@ -2441,7 +2451,8 @@ RegressionResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                         "scale_factor_tune",
                         "fix_scale_factor",
                         "min_scale_factor",
-                        "max_scale_factor"))))
+                        "max_scale_factor",
+                        "new_data_FI"))))
             self$add(jmvcore::Array$new(
                 options=options,
                 name="ale_plots",
@@ -2526,7 +2537,8 @@ RegressionResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                         "scale_factor_tune",
                         "fix_scale_factor",
                         "min_scale_factor",
-                        "max_scale_factor"))))
+                        "max_scale_factor",
+                        "new_data_FI"))))
             self$add(jmvcore::Output$new(
                 options=options,
                 name="residuals",

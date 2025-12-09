@@ -644,10 +644,30 @@ children:
         stretchFactor: 1
         children:
           - type: LayoutBox
+            style: list
             margin: large
             children:
               - type: Label
-                label: <b> Permutation Feature Importance </b>
+                label: <b> Select Dataset </b>            
+              - type: RadioButton
+                name: data_label_SA
+                optionName: new_data_SA
+                optionPart: train
+              - name: new_data_SA_test
+                type: RadioButton
+                optionName: new_data_SA
+                optionPart: test
+          - type: LayoutBox
+            style: list
+            margin: large
+            children:
+              - type: Label
+                label: <b> Feature Importance </b>
+          - type: LayoutBox
+            margin: large
+            children:
+              - type: Label
+                label: Permutation Feature Importance
               - type: LayoutBox
                 style: list
                 margin: large
@@ -655,7 +675,7 @@ children:
                   - type: CheckBox
                     name: pfi
               - type: Label
-                label: <b> SHAP Values </b>
+                label: SHAP Values
               - type: LayoutBox
                 style: inline
                 margin: large
@@ -673,7 +693,7 @@ children:
                     name: shap_swarm
                     enable: (show_shap)
               - type: Label
-                label: <b> Olden's Method &nbsp; &nbsp; &nbsp;</b>
+                label: Olden's Method &nbsp; &nbsp; &nbsp;
               - type: LayoutBox
                 style: list
                 margin: large
@@ -682,7 +702,7 @@ children:
                     name: olden
                     enable: (show_olden)
               - type: Label
-                label: <b> Sobol-Jansen Method </b>
+                label: Sobol-Jansen Method
               - type: LayoutBox
                 style: list
                 margin: large
@@ -690,30 +710,31 @@ children:
                   - type: CheckBox
                     name: sobol
                     enable: (show_sobol)
+          - type: LayoutBox
+            style: list
+            margin: large
+            children:
+              - type: Label
+                label: <b> Feature Interaction </b>
+          - type: LayoutBox
+            style: list
+            margin: large
+            children:
+              - type: Label
+                label: Friedman's H-statistic
               - type: LayoutBox
+                style: inline
                 margin: large
                 children:
-                  - type: Label
-                    label: <b> Friedman's H-statistic </b>
-                  - type: LayoutBox
-                    style: inline
-                    margin: large
-                    children:
-                      - type: CheckBox
-                        name: h2_total
-                      - type: CheckBox
-                        name: h2_pair_norm
-                      - type: CheckBox
-                        name: h2_pair_raw
-              - type: LayoutBox
-                style: list
-                margin: large
-                children:
-                  - type: ComboBox
-                    name: new_data_SA
+                  - type: CheckBox
+                    name: h2_total
+                  - type: CheckBox
+                    name: h2_pair_norm
+                  - type: CheckBox
+                    name: h2_pair_raw
       - type: CollapseBox
         collapsed: true
-        label: Feature Interaction and Functional Dependence
+        label: Functional Dependence Plots
         style: list
         stretchFactor: 1
         children:
@@ -721,8 +742,16 @@ children:
             style: list
             margin: large
             children:
-                  - type: ComboBox
-                    name: new_data_FI
+              - type: Label
+                label: <b> Select Dataset </b>            
+              - type: RadioButton
+                name: data_label_FI
+                optionName: new_data_FI
+                optionPart: train
+              - name: new_data_FI_test
+                type: RadioButton
+                optionName: new_data_FI
+                optionPart: test
           - type: ModeSelector
             name: mode2
             stretchFactor: 1

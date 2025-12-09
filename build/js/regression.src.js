@@ -1352,12 +1352,52 @@ view.layout = ui.extend({
 						{
 							type: DefaultControls.LayoutBox,
 							typeName: 'LayoutBox',
+							style: "list",
 							margin: "large",
 							controls: [
 								{
 									type: DefaultControls.Label,
 									typeName: 'Label',
-									label: "<b> Permutation Feature Importance </b>"
+									label: "<b> Select Dataset </b>"
+								},
+								{
+									type: DefaultControls.RadioButton,
+									typeName: 'RadioButton',
+									name: "data_label_SA",
+									optionName: "new_data_SA",
+									optionPart: "train"
+								},
+								{
+									name: "new_data_SA_test",
+									type: DefaultControls.RadioButton,
+									typeName: 'RadioButton',
+									optionName: "new_data_SA",
+									optionPart: "test"
+								}
+							]
+						},
+						{
+							type: DefaultControls.LayoutBox,
+							typeName: 'LayoutBox',
+							style: "list",
+							margin: "large",
+							controls: [
+								{
+									type: DefaultControls.Label,
+									typeName: 'Label',
+									label: "<b> Feature Importance </b>"
+								}
+							]
+						},
+						{
+							type: DefaultControls.LayoutBox,
+							typeName: 'LayoutBox',
+							margin: "large",
+							controls: [
+								{
+									type: DefaultControls.Label,
+									typeName: 'Label',
+									label: "Permutation Feature Importance"
 								},
 								{
 									type: DefaultControls.LayoutBox,
@@ -1375,7 +1415,7 @@ view.layout = ui.extend({
 								{
 									type: DefaultControls.Label,
 									typeName: 'Label',
-									label: "<b> SHAP Values </b>"
+									label: "SHAP Values"
 								},
 								{
 									type: DefaultControls.LayoutBox,
@@ -1412,7 +1452,7 @@ view.layout = ui.extend({
 								{
 									type: DefaultControls.Label,
 									typeName: 'Label',
-									label: "<b> Olden's Method &nbsp; &nbsp; &nbsp;</b>"
+									label: "Olden's Method &nbsp; &nbsp; &nbsp;"
 								},
 								{
 									type: DefaultControls.LayoutBox,
@@ -1431,7 +1471,7 @@ view.layout = ui.extend({
 								{
 									type: DefaultControls.Label,
 									typeName: 'Label',
-									label: "<b> Sobol-Jansen Method </b>"
+									label: "Sobol-Jansen Method"
 								},
 								{
 									type: DefaultControls.LayoutBox,
@@ -1446,52 +1486,53 @@ view.layout = ui.extend({
 											enable: "(show_sobol)"
 										}
 									]
+								}
+							]
+						},
+						{
+							type: DefaultControls.LayoutBox,
+							typeName: 'LayoutBox',
+							style: "list",
+							margin: "large",
+							controls: [
+								{
+									type: DefaultControls.Label,
+									typeName: 'Label',
+									label: "<b> Feature Interaction </b>"
+								}
+							]
+						},
+						{
+							type: DefaultControls.LayoutBox,
+							typeName: 'LayoutBox',
+							style: "list",
+							margin: "large",
+							controls: [
+								{
+									type: DefaultControls.Label,
+									typeName: 'Label',
+									label: "Friedman's H-statistic"
 								},
 								{
 									type: DefaultControls.LayoutBox,
 									typeName: 'LayoutBox',
+									style: "inline",
 									margin: "large",
 									controls: [
 										{
-											type: DefaultControls.Label,
-											typeName: 'Label',
-											label: "<b> Friedman's H-statistic </b>"
+											type: DefaultControls.CheckBox,
+											typeName: 'CheckBox',
+											name: "h2_total"
 										},
 										{
-											type: DefaultControls.LayoutBox,
-											typeName: 'LayoutBox',
-											style: "inline",
-											margin: "large",
-											controls: [
-												{
-													type: DefaultControls.CheckBox,
-													typeName: 'CheckBox',
-													name: "h2_total"
-												},
-												{
-													type: DefaultControls.CheckBox,
-													typeName: 'CheckBox',
-													name: "h2_pair_norm"
-												},
-												{
-													type: DefaultControls.CheckBox,
-													typeName: 'CheckBox',
-													name: "h2_pair_raw"
-												}
-											]
-										}
-									]
-								},
-								{
-									type: DefaultControls.LayoutBox,
-									typeName: 'LayoutBox',
-									style: "list",
-									margin: "large",
-									controls: [
+											type: DefaultControls.CheckBox,
+											typeName: 'CheckBox',
+											name: "h2_pair_norm"
+										},
 										{
-											type: DefaultControls.ComboBox,
-											typeName: 'ComboBox',
-											name: "new_data_SA"
+											type: DefaultControls.CheckBox,
+											typeName: 'CheckBox',
+											name: "h2_pair_raw"
 										}
 									]
 								}
@@ -1503,7 +1544,7 @@ view.layout = ui.extend({
 					type: DefaultControls.CollapseBox,
 					typeName: 'CollapseBox',
 					collapsed: true,
-					label: "Feature Interaction and Functional Dependence",
+					label: "Functional Dependence Plots",
 					style: "list",
 					stretchFactor: 1,
 					controls: [
@@ -1514,9 +1555,23 @@ view.layout = ui.extend({
 							margin: "large",
 							controls: [
 								{
-									type: DefaultControls.ComboBox,
-									typeName: 'ComboBox',
-									name: "new_data_FI"
+									type: DefaultControls.Label,
+									typeName: 'Label',
+									label: "<b> Select Dataset </b>"
+								},
+								{
+									type: DefaultControls.RadioButton,
+									typeName: 'RadioButton',
+									name: "data_label_FI",
+									optionName: "new_data_FI",
+									optionPart: "train"
+								},
+								{
+									name: "new_data_FI_test",
+									type: DefaultControls.RadioButton,
+									typeName: 'RadioButton',
+									optionName: "new_data_FI",
+									optionPart: "test"
 								}
 							]
 						},
