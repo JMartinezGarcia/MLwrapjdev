@@ -395,6 +395,8 @@ RegressionClass <- R6::R6Class(
 
             saveRDS(analysis_object, model_file)
 
+            saveRDS(use_test, file.path(tempdir(), "use_test.rds"))
+
         },
 
         .compare_hash = function(){

@@ -493,6 +493,8 @@ BinaryClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::
 
             saveRDS(analysis_object, model_file)
 
+            saveRDS(use_test, file.path(tempdir(), "use_test.rds"))
+
         },
 
         .compare_hash = function(){

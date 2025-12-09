@@ -552,6 +552,8 @@ MulticlassClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) 
 
             saveRDS(analysis_object, model_file)
 
+            saveRDS(use_test, file.path(tempdir(), "use_test.rds"))
+
 
         },
 
