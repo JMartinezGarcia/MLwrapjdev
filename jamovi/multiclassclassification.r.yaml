@@ -443,7 +443,7 @@ items:
           title: $key
           type: Image
           description: descriptives plot
-          width: 900
+          width: 600
           height: 600
           renderFun: .plot_results
           clearWith:  # <-- here
@@ -528,7 +528,7 @@ items:
       title: Permutation Feature Importance Plots
       type: Image
       description: an array of plots
-      width: 900
+      width: 600
       height: 600
       renderFun: .plot_pfi
       visible: (pfi)
@@ -614,7 +614,7 @@ items:
           title: $key
           type: Image
           description: descriptives plot
-          width: 900
+          width: 600
           height: 600
           renderFun: .plot_shap
           clearWith:  # <-- here
@@ -695,7 +695,7 @@ items:
       title: Olden's Method Sensitivity Plots
       type: Image
       description: olden barplot
-      width: 900
+      width: 600
       height: 600
       renderFun: .plot_olden
       visible: (olden)
@@ -1043,7 +1043,7 @@ items:
       title: "H² Normalized Plot"
       type: Image
       description: Friedman H-stat barplot
-      width: 900
+      width: 600
       height: 600
       renderFun: .plot_h2_total
       visible: (h2_total)
@@ -1128,7 +1128,7 @@ items:
       title: "Pairwise Interaction Plot (Normalized)"
       type: Image
       description: Friedman H-stat Pairwise Interaction barplot (normalized)
-      width: 900
+      width: 600
       height: 600
       renderFun: .plot_h2_pair_norm
       visible: (h2_pair_norm)
@@ -1213,7 +1213,7 @@ items:
       title: "Pairwise Interaction Plot (Unnormalized)"
       type: Image
       description: Friedman H-stat Pairwise Interaction barplot (normalized)
-      width: 900
+      width: 600
       height: 600
       renderFun: .plot_h2_pair_raw
       visible: (h2_pair_raw)
@@ -1557,7 +1557,7 @@ items:
           title: $key
           type: Image
           description: descriptives plot
-          width: 900
+          width: 600
           height: 600
           renderFun: .plot_pdp
           clearWith:  # <-- here
@@ -1645,7 +1645,7 @@ items:
           title: $key
           type: Image
           description: descriptives plot
-          width: 900
+          width: 600
           height: 600
           renderFun: .plot_ale
           clearWith:  # <-- here
