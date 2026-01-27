@@ -898,13 +898,23 @@ BinaryClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::
 
             for (cov in self$options$covs){
 
-                dat[[cov]] <- base::as.numeric(dat[[cov]])
+                dat[[cov]] <- as.numeric(dat[[cov]])
 
             }
 
             for (fac in self$options$factors){
 
-                dat[[fac]] <- base::as.factor(dat[[fac]])
+                if (length(levels(as.factor(dat[[fac]]))) == 2){
+
+
+
+                    dat[[fac]] <- as.numeric(as.character(dat[[fac]]))
+                }
+
+                else {
+
+                    dat[[fac]] <- base::factor(dat[[fac]], ordered = FALSE)
+                }
 
             }
 

@@ -49,16 +49,16 @@ RemoteHost: api.github.com
 RemoteRepo: MLwrap
 RemoteUsername: JMartinezGarcia
 RemoteRef: HEAD
-RemoteSha: a43a342acc01006eeedf3624cb0436c758903f91
+RemoteSha: fb4c7c3323c8bf3c765acb114ff5fdca4015748b
 GithubRepo: MLwrap
 GithubUsername: JMartinezGarcia
 GithubRef: HEAD
-GithubSHA1: a43a342acc01006eeedf3624cb0436c758903f91
+GithubSHA1: fb4c7c3323c8bf3c765acb114ff5fdca4015748b
 NeedsCompilation: no
-Packaged: 2025-12-09 10:00:22 UTC; javiermartinezgarcia
+Packaged: 2026-01-22 13:37:20 UTC; javiermartinezgarcia
 Author: Javier Martínez García [aut] (<https://orcid.org/0009-0007-7861-5274>),
   Juan José Montaño Moreno [ctb]
     (<https://orcid.org/0000-0002-1116-1964>),
   Albert Sesé [cre, ctb] (<https://orcid.org/0000-0003-3771-1749>)
 Maintainer: Albert Sesé <albert.sese@uib.es>
-Built: R 4.4.1; ; 2025-12-09 10:00:22 UTC; unix
+Built: R 4.4.1; ; 2026-01-22 13:37:20 UTC; unix

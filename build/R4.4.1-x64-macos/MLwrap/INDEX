@@ -1,5 +1,6 @@
 build_model             Create ML Model
 fine_tuning             Fine Tune ML Model
+plot_ale                Plot Accumulated Local Effects (ALE)
 plot_calibration_curve
                         Plotting Calibration Curve
 plot_confusion_matrix   Plotting Confusion Matrix
@@ -12,6 +13,7 @@ plot_integrated_gradients
 plot_lift_curve         Plotting Lift Curve
 plot_loss_curve         Plot Neural Network Loss Curve
 plot_olden              Plotting Olden Values Barplot
+plot_pdp                Plot Partial Dependence (PDP)
 plot_pfi                Plotting Permutation Feature Importance Barplot
 plot_pr_curve           Plotting Precision-Recall Curve
 plot_residuals_distribution
@@ -32,10 +34,15 @@ table_best_hyperparameters
                         Best Hyperparameters Configuration
 table_evaluation_results
                         Evaluation Results
+table_h2_total          Friedman's H-Statistic Table
 table_integrated_gradients_results
                         Integrated Gradients Summarized Results Table
 table_olden_results     Olden Results Table
+table_pairwise_interaction
+                        Friedman's H-Statistic Pairwise Interaction
+                        Table
 table_pfi_results       Permutation Feature Importance Results Table
 table_shap_results      SHAP Summarized Results Table
 table_sobol_jansen_results
                         Sobol-Jansen Results Table
+tutorial                MLwrap Comprehensive Tutorial

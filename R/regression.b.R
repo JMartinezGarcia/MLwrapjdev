@@ -815,13 +815,23 @@ RegressionClass <- R6::R6Class(
 
             for (cov in self$options$covs){
 
-                dat[[cov]] <- base::as.numeric(dat[[cov]])
+                dat[[cov]] <- as.numeric(dat[[cov]])
 
             }
 
             for (fac in self$options$factors){
 
-                dat[[fac]] <- base::as.factor(dat[[fac]])
+                if (length(levels(as.factor(dat[[fac]]))) == 2){
+
+
+
+                    dat[[fac]] <- as.numeric(as.character(dat[[fac]]))
+                }
+
+                else {
+
+                    dat[[fac]] <- base::factor(dat[[fac]], ordered = FALSE)
+                }
 
             }
 
@@ -1497,6 +1507,16 @@ RegressionClass <- R6::R6Class(
         },
 
         .checkArguments = function(){
+
+            # Check there is at least two variables
+
+            total_variables = length(self$options$factors) + length(self$options$covs)
+
+            if (total_variables < 2){
+
+                stop("There should be at least 2 features (covariates or factors) for the analysis!")
+            }
+
 
             if (self$options$sobol){
 
