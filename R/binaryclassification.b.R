@@ -1617,6 +1617,15 @@ BinaryClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::
 
         .checkArguments = function(){
 
+            # Check there is at least two variables
+
+            total_variables = length(self$options$factors) + length(self$options$covs)
+
+            if (total_variables < 2){
+
+                stop("There should be at least 2 features (covariates or factors) for the analysis!")
+            }
+
             if (self$options$sobol){
 
                 if (length(self$options$factors) > 0){
