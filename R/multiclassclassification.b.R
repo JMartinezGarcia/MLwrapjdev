@@ -1092,11 +1092,13 @@ MulticlassClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) 
 
             for (fac in self$options$factors){
 
-                if (length(levels(as.factor(dat[[fac]]))) == 2){
+                u = sort(levels(as.factor(dat[[fac]])))
 
+                if (length(u) == 2 && identical(u, c("0","1"))) {
 
 
                     dat[[fac]] <- as.numeric(as.character(dat[[fac]]))
+
                 }
 
                 else {
