@@ -63,7 +63,7 @@ MulticlassClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) 
 
             }
 
-
+            private$.initTuningTablePlots()
             private$.initSummaryTable()
             private$.initResultsPlots()
             private$.initSensitivityPlots()
@@ -71,6 +71,34 @@ MulticlassClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) 
             private$.initOutputs()
 
 
+        },
+
+        .initTuningTablePlots = function(){
+
+            names_and_hyperparameters <- private$.getHyperparameters()
+
+            hyperparameters <- names_and_hyperparameters$hyp_list
+
+            if (check_tuning(hyperparameters)){
+
+                self$results$tuner_table$setVisible(TRUE)
+
+                self$results$text_tuning$setVisible(TRUE)
+
+                if (self$options$plot_tuner_results){
+
+                    self$results$plot_tuner$setVisible(TRUE)
+                }
+
+            } else{
+
+                self$results$plot_tuner$setVisible(FALSE)
+
+                self$results$tuner_table$setVisible(FALSE)
+
+                self$results$text_tuning$setVisible(FALSE)
+
+            }
         },
 
         .initSummaryTable = function(){
@@ -707,7 +735,7 @@ MulticlassClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) 
           # Save to df
 
           train_df <- as.data.frame(
-                        list("Dataset" = "Train",
+                        list(Dataset = "Train",
                             "Sensitivity" = sens_train$.estimate,
                            "Specificity" = spec_train$.estimate,
                            "Recall" = recall_train$.estimate,
@@ -726,7 +754,7 @@ MulticlassClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) 
                         ))
 
           test_df <- as.data.frame(
-                        list("Dataset" = "Test",
+                        list(Dataset = "Test",
                             "Sensitivity" = sens_test$.estimate,
                            "Specificity" = spec_test$.estimate,
                            "Recall" = recall_test$.estimate,
@@ -1180,9 +1208,9 @@ MulticlassClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) 
 
             metrics_set <- private$.getSummaryMetrics(self$options, add_dataset = TRUE)
 
-            table_summary$setRow(rowNo = 1, values = as.list(train_res[metrics_set][1,]))
+            table_summary$setRow(rowNo = 1, values = as.list(train_res[metrics_set]))
 
-            table_summary$setRow(rowNo = 2, values = as.list(test_res[metrics_set][1,]))
+            table_summary$setRow(rowNo = 2, values = as.list(test_res[metrics_set]))
 
             # Train And Test Summary Tables
 
@@ -1231,6 +1259,8 @@ MulticlassClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) 
             mean_best_hyp <- tune::show_best(analysis_object$tuner_fit, n = 1)$mean
 
             std_best_hyp <- tune::show_best(analysis_object$tuner_fit, n = 1)$std_err
+
+            names(best_hyp) <- pretty_names(names(best_hyp))
 
             for (name in names(best_hyp)){
 
@@ -1717,7 +1747,7 @@ MulticlassClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) 
                 p <- self$results$model$plots[[plot_key]]
             }
 
-            print(p)
+            return(p + transparent_theme)
 
         },
 
@@ -1729,7 +1759,7 @@ MulticlassClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) 
 
             p <- self$results$model$plots[[plot_key]]
 
-            print(p)
+            return(p + transparent_theme)
 
         },
 
@@ -1741,7 +1771,7 @@ MulticlassClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) 
 
           p <- self$results$model$plots[[plot_key]]
 
-          print(p)
+          return(p + transparent_theme)
 
         },
 
@@ -1753,7 +1783,7 @@ MulticlassClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) 
 
             p <- self$results$model$plots[[plot_key]]
 
-            print(p)
+            return(p + transparent_theme)
 
         },
 
@@ -1822,7 +1852,7 @@ MulticlassClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) 
                     strip.text   = ggplot2::element_text(size = 12, face = "bold")
                 )
 
-            print(p)
+            return(p + transparent_theme)
         },
 
         .plot_h2_total = function(image, ...){
@@ -1833,7 +1863,7 @@ MulticlassClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) 
 
             p <- self$results$model$plots[["H^2 Total"]]
 
-            print(p)
+            return(p + transparent_theme)
 
         },
 
@@ -1845,7 +1875,7 @@ MulticlassClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) 
 
             p <- self$results$model$plots[["H^2 Pairwise Normalized"]]
 
-            print(p)
+            return(p + transparent_theme)
 
         },
 
@@ -1857,7 +1887,7 @@ MulticlassClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) 
 
             p <- self$results$model$plots[["H^2 Pairwise Raw"]]
 
-            print(p)
+            return(p + transparent_theme)
 
         },
 
@@ -1885,7 +1915,7 @@ MulticlassClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) 
                                   show_ice = self$options$show_ice,
                                   use_test = use_test,
                                   plot = F)
-            print(p)
+            return(p + transparent_theme)
 
         },
 
@@ -1911,7 +1941,7 @@ MulticlassClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) 
                                   group = group_by,
                                   use_test = use_test,
                                   plot = F)
-            print(p)
+            return(p + transparent_theme)
 
         },
 

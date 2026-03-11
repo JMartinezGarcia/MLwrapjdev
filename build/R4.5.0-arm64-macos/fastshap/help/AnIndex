@@ -1,0 +1,10 @@
+fastshap-package	fastshap-package
+explain	explain
+explain.default	explain
+explain.lgb.Booster	explain
+explain.lm	explain
+explain.xgb.Booster	explain
+fastshap	fastshap-package
+gen_friedman	gen_friedman
+titanic	titanic
+titanic_mice	titanic_mice

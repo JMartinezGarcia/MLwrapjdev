@@ -1,0 +1,18 @@
+brulee-autoplot         Plot model loss over epochs
+brulee-coefs            Extract Model Coefficients
+brulee_activations      Activation functions for neural networks in
+                        brulee
+brulee_linear_reg       Fit a linear regression model
+brulee_logistic_reg     Fit a logistic regression model
+brulee_mlp              Fit neural networks
+brulee_multinomial_reg
+                        Fit a multinomial regression model
+matrix_to_dataset       Convert data to torch format
+predict.brulee_linear_reg
+                        Predict from a 'brulee_linear_reg'
+predict.brulee_logistic_reg
+                        Predict from a 'brulee_logistic_reg'
+predict.brulee_mlp      Predict from a 'brulee_mlp'
+predict.brulee_multinomial_reg
+                        Predict from a 'brulee_multinomial_reg'
+schedule_decay_time     Change the learning rate over time

@@ -42,10 +42,39 @@ BinaryClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::
 
             }
 
+            private$.initTuningTablePlots()
             private$.initSummaryTable()
             private$.initResultsPlots()
             private$.initSensitivityPlots()
 
+        },
+
+        .initTuningTablePlots = function(){
+
+            names_and_hyperparameters <- private$.getHyperparameters()
+
+            hyperparameters <- names_and_hyperparameters$hyp_list
+
+            if (check_tuning(hyperparameters)){
+
+                self$results$tuner_table$setVisible(TRUE)
+
+                self$results$text_tuning$setVisible(TRUE)
+
+                if (self$options$plot_tuner_results){
+
+                    self$results$plot_tuner$setVisible(TRUE)
+                }
+
+            } else{
+
+                self$results$plot_tuner$setVisible(FALSE)
+
+                self$results$tuner_table$setVisible(FALSE)
+
+                self$results$text_tuning$setVisible(FALSE)
+
+            }
         },
 
         .initSummaryTable = function(){
@@ -960,6 +989,8 @@ BinaryClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::
 
                  std_best_hyp <- tune::show_best(analysis_object$tuner_fit, n = 1)$std_err
 
+                 names(best_hyp) <- pretty_names(names(best_hyp))
+
                  for (name in names(best_hyp)){
 
                      table$addColumn(name = name)
@@ -1369,7 +1400,7 @@ BinaryClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::
 
             p <- self$results$model$plots[[plot_key]]
 
-            print(p)
+            return(p + transparent_theme)
 
         },
 
@@ -1404,7 +1435,7 @@ BinaryClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::
                 p <- self$results$model$plots[[plot_key]]
             }
 
-            print(p)
+            return(p + transparent_theme)
 
         },
 
@@ -1450,7 +1481,7 @@ BinaryClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::
 
             }
 
-            print(p)
+            return(p + transparent_theme)
 
         },
 
@@ -1462,7 +1493,7 @@ BinaryClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::
 
             p <- self$results$model$plots[["H^2 Total"]]
 
-            print(p)
+            return(p + transparent_theme)
 
         },
 
@@ -1474,7 +1505,7 @@ BinaryClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::
 
             p <- self$results$model$plots[["H^2 Pairwise Normalized"]]
 
-            print(p)
+            return(p + transparent_theme)
 
         },
 
@@ -1486,7 +1517,7 @@ BinaryClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::
 
             p <- self$results$model$plots[["H^2 Pairwise Raw"]]
 
-            print(p)
+            return(p + transparent_theme)
 
         },
 
@@ -1513,7 +1544,7 @@ BinaryClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::
                                   show_ice = self$options$show_ice,
                                   use_test = use_test,
                                   plot = F)
-            print(p)
+            return(p + transparent_theme)
 
         },
 
@@ -1539,7 +1570,7 @@ BinaryClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::
                                   group = group_by,
                                   use_test = use_test,
                                   plot = F)
-            print(p)
+            return(p + transparent_theme)
 
         },
 

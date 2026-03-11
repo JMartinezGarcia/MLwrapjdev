@@ -19,10 +19,39 @@ RegressionClass <- R6::R6Class(
             private$.sobol_jansen <- FALSE
             private$.feature_names <- NULL
 
+            private$.initTuningTablePlots()
             private$.initSummaryTable()
             private$.initResultsPlots()
             private$.initSensitivityPlots()
 
+        },
+
+        .initTuningTablePlots = function(){
+
+            names_and_hyperparameters <- private$.getHyperparameters()
+
+            hyperparameters <- names_and_hyperparameters$hyp_list
+
+            if (check_tuning(hyperparameters)){
+
+                self$results$tuner_table$setVisible(TRUE)
+
+                self$results$text_tuning$setVisible(TRUE)
+
+                if (self$options$plot_tuner_results){
+
+                    self$results$plot_tuner$setVisible(TRUE)
+                }
+
+            } else{
+
+                self$results$plot_tuner$setVisible(FALSE)
+
+                self$results$tuner_table$setVisible(FALSE)
+
+                self$results$text_tuning$setVisible(FALSE)
+
+            }
         },
 
         .initSummaryTable = function(){
@@ -865,8 +894,6 @@ RegressionClass <- R6::R6Class(
 
             table <- self$results$tuner_table
 
-            table$setVisible(TRUE)
-
             hyp_names_tune <- names(analysis_object$hyperparameters$hyperparams_ranges)
 
             best_hyp <- analysis_object$hyperparameters$hyperparams_constant
@@ -876,6 +903,8 @@ RegressionClass <- R6::R6Class(
             mean_best_hyp <- tune::show_best(analysis_object$tuner_fit, n = 1)$mean
 
             std_best_hyp <- tune::show_best(analysis_object$tuner_fit, n = 1)$std_err
+
+            names(best_hyp) <- pretty_names(names(best_hyp))
 
             for (name in names(best_hyp)){
 
@@ -896,8 +925,6 @@ RegressionClass <- R6::R6Class(
         },
 
         .populateTunerPlots = function(){
-
-            self$results$plot_tuner$setVisible(TRUE)
 
             self$results$plot_tuner$setState("tuner_search_results")
 
@@ -1267,7 +1294,7 @@ RegressionClass <- R6::R6Class(
 
             p <- self$results$model$plots[[plot_key]]
 
-            print(p)
+            return(p + transparent_theme)
 
         },
 
@@ -1284,15 +1311,15 @@ RegressionClass <- R6::R6Class(
 
             if (plot_key == "scatter_predictions"){
 
-                p <- patchwork::wrap_plots(plot_train, plot_test, ncol = 2)
+                p <- patchwork::wrap_plots(plot_train, plot_test, ncol = 2) & transparent_theme
 
             } else {
 
-                p <- patchwork::wrap_plots(plot_train, plot_test, nrow = 2)
+                p <- patchwork::wrap_plots(plot_train, plot_test, nrow = 2) & transparent_theme
 
             }
 
-            print(p)
+            return(p)
 
         },
 
@@ -1338,7 +1365,7 @@ RegressionClass <- R6::R6Class(
 
                 }
 
-            print(p)
+            return(p + transparent_theme)
 
             },
 
@@ -1350,7 +1377,7 @@ RegressionClass <- R6::R6Class(
 
             p <- self$results$model$plots[["H^2 Total"]]
 
-            print(p)
+            return(p + transparent_theme)
 
         },
 
@@ -1362,7 +1389,7 @@ RegressionClass <- R6::R6Class(
 
             p <- self$results$model$plots[["H^2 Pairwise Normalized"]]
 
-            print(p)
+            return(p + transparent_theme)
 
         },
 
@@ -1374,7 +1401,7 @@ RegressionClass <- R6::R6Class(
 
             p <- self$results$model$plots[["H^2 Pairwise Raw"]]
 
-            print(p)
+            return(p + transparent_theme)
 
         },
 
@@ -1402,7 +1429,7 @@ RegressionClass <- R6::R6Class(
                                                       show_ice = self$options$show_ice,
                                                       use_test = use_test,
                                                       plot = F)
-            print(p)
+            return(p + transparent_theme)
 
         },
 
@@ -1429,7 +1456,7 @@ RegressionClass <- R6::R6Class(
                                                       group = group_by,
                                                       use_test = use_test,
                                                       plot = F)
-            print(p)
+            return(p + transparent_theme)
 
         },
 

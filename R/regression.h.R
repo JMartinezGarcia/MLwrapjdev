@@ -1049,9 +1049,11 @@ RegressionResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     inherit = jmvcore::Group,
     active = list(
         text = function() private$.items[["text"]],
-        summary = function() private$.items[["summary"]],
+        text_tuning = function() private$.items[["text_tuning"]],
         tuner_table = function() private$.items[["tuner_table"]],
         plot_tuner = function() private$.items[["plot_tuner"]],
+        text_summary = function() private$.items[["text_summary"]],
+        summary = function() private$.items[["summary"]],
         model = function() private$..model,
         plots_results = function() private$.items[["plots_results"]],
         plots_sensitivity = function() private$.items[["plots_sensitivity"]],
@@ -1086,92 +1088,12 @@ RegressionResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$add(jmvcore::Preformatted$new(
                 options=options,
                 name="text",
-                title="Summary Results"))
-            self$add(jmvcore::Table$new(
+                title=""))
+            self$add(jmvcore::Preformatted$new(
                 options=options,
-                name="summary",
-                title="Summary Results",
-                rows=2,
-                columns=list(
-                    list(
-                        `name`="Dataset", 
-                        `title`="Dataset", 
-                        `type`="text")),
-                clearWith=list(
-                    "seed",
-                    "dep",
-                    "covs",
-                    "factors",
-                    "stdCovs",
-                    "encCat",
-                    "mode",
-                    "metrics",
-                    "tuners",
-                    "hidden_neurons_tune",
-                    "fix_n_neurons",
-                    "min_n_neurons",
-                    "max_n_neurons",
-                    "penalty_tune",
-                    "fix_penalty",
-                    "min_penalty",
-                    "max_penalty",
-                    "mtry_tune",
-                    "fix_mtry",
-                    "min_mtry",
-                    "max_mtry",
-                    "trees_tune",
-                    "fix_trees",
-                    "min_trees",
-                    "max_trees",
-                    "min_n_tune",
-                    "fix_min_n",
-                    "min_min_n",
-                    "max_min_n",
-                    "mtryx_tune",
-                    "fix_mtryx",
-                    "min_mtryx",
-                    "max_mtryx",
-                    "treesx_tune",
-                    "fix_treesx",
-                    "min_treesx",
-                    "max_treesx",
-                    "min_nx_tune",
-                    "fix_min_nx",
-                    "min_min_nx",
-                    "max_min_nx",
-                    "tree_depth_tune",
-                    "fix_tree_depth",
-                    "min_tree_depth",
-                    "max_tree_depth",
-                    "learn_ratex_tune",
-                    "fix_learn_ratex",
-                    "min_learn_ratex",
-                    "max_learn_ratex",
-                    "loss_reduction_tune",
-                    "fix_loss_reduction",
-                    "min_loss_reduction",
-                    "max_loss_reduction",
-                    "kernels",
-                    "cost_tune",
-                    "fix_cost",
-                    "min_cost",
-                    "max_cost",
-                    "margin_tune",
-                    "fix_margin",
-                    "min_margin",
-                    "max_margin",
-                    "rbf_sigma_tune",
-                    "fix_rbf_sigma",
-                    "min_rbf_sigma",
-                    "max_rbf_sigma",
-                    "degree_tune",
-                    "fix_degree",
-                    "min_degree",
-                    "max_degree",
-                    "scale_factor_tune",
-                    "fix_scale_factor",
-                    "min_scale_factor",
-                    "max_scale_factor")))
+                name="text_tuning",
+                title="Hyperparameter Tuning Results",
+                visible=TRUE))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="tuner_table",
@@ -1269,11 +1191,100 @@ RegressionResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot_tuner",
-                title="Tuning Results",
+                title="",
                 width=500,
                 height=400,
                 renderFun=".plot_tuner",
                 visible=FALSE,
+                clearWith=list(
+                    "seed",
+                    "dep",
+                    "covs",
+                    "factors",
+                    "stdCovs",
+                    "encCat",
+                    "mode",
+                    "metrics",
+                    "tuners",
+                    "hidden_neurons_tune",
+                    "fix_n_neurons",
+                    "min_n_neurons",
+                    "max_n_neurons",
+                    "penalty_tune",
+                    "fix_penalty",
+                    "min_penalty",
+                    "max_penalty",
+                    "mtry_tune",
+                    "fix_mtry",
+                    "min_mtry",
+                    "max_mtry",
+                    "trees_tune",
+                    "fix_trees",
+                    "min_trees",
+                    "max_trees",
+                    "min_n_tune",
+                    "fix_min_n",
+                    "min_min_n",
+                    "max_min_n",
+                    "mtryx_tune",
+                    "fix_mtryx",
+                    "min_mtryx",
+                    "max_mtryx",
+                    "treesx_tune",
+                    "fix_treesx",
+                    "min_treesx",
+                    "max_treesx",
+                    "min_nx_tune",
+                    "fix_min_nx",
+                    "min_min_nx",
+                    "max_min_nx",
+                    "tree_depth_tune",
+                    "fix_tree_depth",
+                    "min_tree_depth",
+                    "max_tree_depth",
+                    "learn_ratex_tune",
+                    "fix_learn_ratex",
+                    "min_learn_ratex",
+                    "max_learn_ratex",
+                    "loss_reduction_tune",
+                    "fix_loss_reduction",
+                    "min_loss_reduction",
+                    "max_loss_reduction",
+                    "kernels",
+                    "cost_tune",
+                    "fix_cost",
+                    "min_cost",
+                    "max_cost",
+                    "margin_tune",
+                    "fix_margin",
+                    "min_margin",
+                    "max_margin",
+                    "rbf_sigma_tune",
+                    "fix_rbf_sigma",
+                    "min_rbf_sigma",
+                    "max_rbf_sigma",
+                    "degree_tune",
+                    "fix_degree",
+                    "min_degree",
+                    "max_degree",
+                    "scale_factor_tune",
+                    "fix_scale_factor",
+                    "min_scale_factor",
+                    "max_scale_factor")))
+            self$add(jmvcore::Preformatted$new(
+                options=options,
+                name="text_summary",
+                title="Summary Results"))
+            self$add(jmvcore::Table$new(
+                options=options,
+                name="summary",
+                title="Summary Results",
+                rows=2,
+                columns=list(
+                    list(
+                        `name`="Dataset", 
+                        `title`="Dataset", 
+                        `type`="text")),
                 clearWith=list(
                     "seed",
                     "dep",
@@ -2946,9 +2957,11 @@ RegressionBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$text} \tab \tab \tab \tab \tab a preformatted \cr
-#'   \code{results$summary} \tab \tab \tab \tab \tab a table \cr
+#'   \code{results$text_tuning} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$tuner_table} \tab \tab \tab \tab \tab tuners table results \cr
 #'   \code{results$plot_tuner} \tab \tab \tab \tab \tab tuners plots \cr
+#'   \code{results$text_summary} \tab \tab \tab \tab \tab a preformatted \cr
+#'   \code{results$summary} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$model} \tab \tab \tab \tab \tab The underlying \code{mlwrap} object \cr
 #'   \code{results$plots_results} \tab \tab \tab \tab \tab an array of plots \cr
 #'   \code{results$plots_sensitivity} \tab \tab \tab \tab \tab an array of plots \cr
@@ -2972,9 +2985,9 @@ RegressionBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #'
 #' Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:
 #'
-#' \code{results$summary$asDF}
+#' \code{results$tuner_table$asDF}
 #'
-#' \code{as.data.frame(results$summary)}
+#' \code{as.data.frame(results$tuner_table)}
 #'
 #' @export
 Regression <- function(

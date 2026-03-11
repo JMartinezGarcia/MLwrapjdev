@@ -134,3 +134,20 @@ HyperparamsNN_nnet <- R6::R6Class("Neural Network Hyperparameters",
                                       }
                                   )
 )
+
+transparent_theme <- ggplot2::theme_minimal() + ggplot2::theme(
+    plot.background  = ggplot2::element_rect(fill = "transparent", colour = NA),
+    panel.background = ggplot2::element_rect(fill = "transparent", colour = NA)
+)
+
+pretty_names <- function(x) {
+    sapply(strsplit(x, "_"), function(words) {
+        words <- paste0(toupper(substring(words, 1, 1)), substring(words, 2))
+        paste(words, collapse = " ")
+    }, USE.NAMES = FALSE)
+}
+
+check_tuning <- function(x) {
+    any(vapply(x, length, integer(1)) > 1)
+}
+
